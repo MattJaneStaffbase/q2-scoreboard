@@ -6,448 +6,328 @@
 <title>Q2 Sales Scoreboard 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #0E1117; --surface: #161B25; --surface2: #1E2536; --border: #2A3347;
-  --amber: #F5A623; --amber-dim: #7A5010; --green: #22C55E; --green-dim: #14532D;
-  --blue: #60A5FA; --blue-dim: #1E3A5F; --orange: #FB923C; --orange-dim: #7C2D12;
-  --red: #F87171; --red-dim: #7F1D1D; --text: #F1F5F9; --muted: #64748B; --muted2: #94A3B8;
-  --display: 'Barlow Condensed', sans-serif; --body: 'Inter', sans-serif;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0C0F18;--surface:#131929;--surface2:#1A2235;--border:#253048;
+  --amber:#F5A623;--amber-dim:#7A5010;--green:#22C55E;--green-dim:#14532D;
+  --blue:#60A5FA;--blue-dim:#1E3A5F;--orange:#FB923C;--orange-dim:#7C2D12;
+  --red:#F87171;--red-dim:#7F1D1D;--text:#F1F5F9;--muted:#64748B;--muted2:#94A3B8;
+  --display:'Barlow Condensed',sans-serif;--body:'Inter',sans-serif;
 }
-html { font-family: var(--body); background: var(--bg); color: var(--text); min-height: 100vh; }
-
-.header { background: var(--surface); border-bottom: 2px solid var(--amber); padding: 20px 32px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-.header-left { display: flex; align-items: baseline; gap: 16px; }
-.header-title { font-family: var(--display); font-size: 36px; font-weight: 800; letter-spacing: 0.04em; color: var(--amber); text-transform: uppercase; }
-.header-sub { font-family: var(--display); font-size: 18px; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
-.live-badge { display: flex; align-items: center; gap: 6px; background: rgba(245,166,35,0.12); border: 1px solid var(--amber); color: var(--amber); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; }
-.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); animation: pulse 1.5s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-.main { padding: 24px 28px; display: grid; gap: 20px; }
-
-.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px; position: relative; overflow: hidden; }
-.kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-.kpi.amber::before { background: var(--amber); }
-.kpi.green::before { background: var(--green); }
-.kpi.blue::before  { background: var(--blue); }
-.kpi.orange::before{ background: var(--orange); }
-.kpi-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
-.kpi-value { font-family: var(--display); font-size: 42px; font-weight: 800; line-height: 1; color: var(--text); outline: none; cursor: text; min-width: 20px; }
-.kpi-value:focus { color: var(--amber); }
-.kpi-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-.progress-section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 18px 24px; }
-.progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.progress-title { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 0.1em; color: var(--muted2); text-transform: uppercase; }
-.progress-pct { font-family: var(--display); font-size: 24px; font-weight: 800; color: var(--amber); }
-.track { height: 20px; background: var(--surface2); border-radius: 4px; position: relative; overflow: visible; }
-.track-fill { height: 100%; background: linear-gradient(90deg, var(--amber-dim), var(--amber)); border-radius: 4px; transition: width 0.5s ease; position: relative; min-width: 0; }
-.track-fill::after { content: 'ð'; position: absolute; right: -16px; top: -6px; font-size: 22px; }
-.track-milestones { display: flex; justify-content: space-between; margin-top: 6px; }
-.track-milestones span { font-size: 11px; color: var(--muted); font-weight: 500; }
-
-.body-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
-
-.leaderboard { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-.section-header { background: var(--surface2); padding: 12px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
-.section-title { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 0.1em; color: var(--muted2); text-transform: uppercase; }
-.lb-row { display: grid; grid-template-columns: 32px 1fr 80px 40px 24px; align-items: center; gap: 8px; padding: 9px 14px; border-bottom: 1px solid var(--border); transition: background 0.15s; }
-.lb-row:last-child { border-bottom: none; }
-.lb-row:hover { background: var(--surface2); }
-.lb-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 12px; padding: 2px 4px; border-radius: 3px; opacity: 0; transition: opacity 0.15s, color 0.15s; }
-.lb-row:hover .lb-del { opacity: 1; }
-.lb-del:hover { color: var(--red); }
-.lb-rank { font-family: var(--display); font-size: 18px; font-weight: 800; color: var(--muted); text-align: center; }
-.lb-rank.gold   { color: #FFD700; }
-.lb-rank.silver { color: #C0C0C0; }
-.lb-rank.bronze { color: #CD7F32; }
-.lb-name { font-size: 13px; font-weight: 600; color: var(--text); outline: none; cursor: text; min-width: 10px; }
-.lb-name:empty::before { content: attr(data-ph); color: var(--muted); font-style: italic; font-weight: 400; }
-.lb-name:focus { color: var(--amber); }
-.lb-value { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--green); text-align: right; outline: none; cursor: text; min-width: 10px; }
-.lb-value:empty::before { content: attr(data-ph); color: var(--muted); font-size: 12px; font-weight: 400; font-family: var(--body); font-style: italic; }
-.lb-value:focus { color: var(--amber); }
-.lb-deals { font-size: 12px; color: var(--muted2); text-align: center; outline: none; cursor: text; min-width: 10px; }
-.lb-deals:empty::before { content: attr(data-ph); color: var(--muted); }
-.lb-deals:focus { color: var(--amber); }
-.add-row-btn { width: 100%; padding: 9px; background: none; border: none; border-top: 1px dashed var(--border); color: var(--muted); font-size: 12px; font-family: var(--body); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: color 0.15s, background 0.15s; }
-.add-row-btn:hover { color: var(--amber); background: rgba(245,166,35,0.05); }
-
-.pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.pipeline-col { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
-.col-header { padding: 11px 14px; border-bottom: 1px solid var(--border); }
-.col-label { font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.col-count { font-size: 11px; margin-top: 2px; color: var(--muted); }
-.col-closed .col-header { border-top: 3px solid var(--green); }
-.col-early  .col-header { border-top: 3px solid var(--blue); }
-.col-late   .col-header { border-top: 3px solid var(--orange); }
-.col-closing .col-header { border-top: 3px solid var(--red); }
-.col-closed .col-label { color: var(--green); }
-.col-early  .col-label { color: var(--blue); }
-.col-late   .col-label { color: var(--orange); }
-.col-closing .col-label { color: var(--red); }
-.cards { padding: 8px; display: flex; flex-direction: column; gap: 7px; flex: 1; min-height: 60px; }
-
-.card { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 9px 11px; transition: border-color 0.15s, opacity 0.3s; }
-.card:hover { border-color: var(--muted); }
-.card.won { opacity: 0.5; }
-.card.won .card-company { text-decoration: line-through; color: var(--muted); }
-.card-company { font-size: 13px; font-weight: 600; color: var(--text); outline: none; display: block; margin-bottom: 4px; min-width: 10px; }
-.card-company:empty::before { content: attr(data-ph); color: var(--muted); font-weight: 400; font-style: italic; }
-.card-company:focus { color: var(--amber); }
-.card-row { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 6px; }
-.card-value { font-family: var(--display); font-size: 16px; font-weight: 700; color: var(--text); outline: none; cursor: text; flex: 1; min-width: 10px; }
-.card-value:empty::before { content: attr(data-ph); color: var(--muted); font-size: 12px; font-weight: 400; font-family: var(--body); font-style: italic; }
-.card-value:focus { color: var(--amber); }
-.card-owner { font-size: 11px; color: var(--muted2); outline: none; cursor: text; max-width: 80px; text-align: right; min-width: 10px; }
-.card-owner:empty::before { content: attr(data-ph); color: var(--muted); font-style: italic; }
-.card-owner:focus { color: var(--amber); }
-.card-actions { display: flex; gap: 4px; flex-wrap: wrap; }
-.btn { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 3px; border: 1px solid; cursor: pointer; background: none; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--body); transition: background 0.15s, color 0.15s; }
-.btn-won  { border-color: var(--green-dim); color: var(--green); }
-.btn-won:hover  { background: var(--green-dim); }
-.btn-del  { border-color: var(--border); color: var(--muted); }
-.btn-del:hover  { background: var(--red-dim); border-color: var(--red); color: var(--red); }
-.btn-move { border-color: var(--border); color: var(--muted); }
-.btn-move:hover { background: var(--surface); color: var(--muted2); }
-
-.add-card-btn { margin: 0 8px 8px; padding: 8px; background: none; border: 1px dashed var(--border); border-radius: 6px; color: var(--muted); font-size: 12px; font-family: var(--body); cursor: pointer; transition: color 0.15s, border-color 0.15s; display: flex; align-items: center; justify-content: center; gap: 5px; }
-.add-card-btn:hover { color: var(--text); border-color: var(--muted); }
-.col-closed .add-card-btn:hover { color: var(--green); border-color: var(--green); }
-.col-early  .add-card-btn:hover { color: var(--blue);  border-color: var(--blue); }
-.col-late   .add-card-btn:hover { color: var(--orange);border-color: var(--orange); }
-.col-closing .add-card-btn:hover { color: var(--red);  border-color: var(--red); }
-
-.footer { padding: 12px 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.footer-note { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
-.footer-tip { font-size: 11px; color: var(--muted); }
-.footer-tip span { color: var(--amber); }
+html{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh}
+.header{background:var(--surface);border-bottom:2px solid var(--amber);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.header-left{display:flex;align-items:baseline;gap:12px}
+.header-title{font-family:var(--display);font-size:32px;font-weight:800;letter-spacing:.05em;color:var(--amber);text-transform:uppercase}
+.header-sub{font-family:var(--display);font-size:16px;font-weight:600;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.live-badge{display:flex;align-items:center;gap:6px;background:rgba(245,166,35,.1);border:1px solid var(--amber);color:var(--amber);font-size:11px;font-weight:700;letter-spacing:.12em;padding:3px 10px;border-radius:4px;text-transform:uppercase}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.main{padding:18px 28px;display:grid;gap:14px}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;flex-direction:column;gap:3px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi.amber::before{background:var(--amber)}.kpi.green::before{background:var(--green)}.kpi.blue::before{background:var(--blue)}.kpi.orange::before{background:var(--orange)}
+.kpi-label{font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.kpi-value{font-family:var(--display);font-size:38px;font-weight:800;line-height:1;color:var(--text)}
+.kpi.amber .kpi-value{color:var(--amber)}.kpi.green .kpi-value{color:var(--green)}.kpi.blue .kpi-value{color:var(--blue)}.kpi.orange .kpi-value{color:var(--orange)}
+.kpi-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.progress-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 20px}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress-title{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--muted2);text-transform:uppercase}
+.progress-right{display:flex;align-items:center;gap:16px}
+.progress-pct{font-family:var(--display);font-size:22px;font-weight:800;color:var(--amber)}
+.progress-fraction{font-size:11px;color:var(--muted);font-weight:500}
+.track{height:16px;background:var(--surface2);border-radius:4px;position:relative;overflow:visible;border:1px solid var(--border)}
+.track-fill{height:100%;background:linear-gradient(90deg,var(--amber-dim),var(--amber));border-radius:3px;transition:width .6s ease;position:relative;min-width:0}
+.track-fill::after{content:'>>';position:absolute;right:-18px;top:-2px;font-size:11px;color:var(--amber);font-weight:900;font-family:var(--display)}
+.track-milestones{display:flex;justify-content:space-between;margin-top:5px}
+.track-milestones span{font-size:10px;color:var(--muted);font-weight:500}
+.body-grid{display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start}
+.leaderboard{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.section-header{background:var(--surface2);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.section-title{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--muted2);text-transform:uppercase}
+.section-hint{font-size:10px;color:var(--muted);font-style:italic}
+.lb-row{display:grid;grid-template-columns:28px 1fr 80px 28px;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);transition:background .15s}
+.lb-row:last-child{border-bottom:none}
+.lb-row:hover{background:var(--surface2)}
+.lb-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:2px 4px;border-radius:3px;opacity:0;transition:opacity .15s,color .15s}
+.lb-row:hover .lb-del{opacity:1}.lb-del:hover{color:var(--red)}
+.lb-rank{font-family:var(--display);font-size:16px;font-weight:800;color:var(--muted);text-align:center}
+.lb-rank.gold{color:#FFD700}.lb-rank.silver{color:#C0C0C0}.lb-rank.bronze{color:#CD7F32}
+.lb-name{font-size:13px;font-weight:600;color:var(--text);outline:none;cursor:text;min-width:10px;white-space:nowrap;overflow:hidden}
+.lb-name:empty::before{content:attr(data-ph);color:var(--muted);font-style:italic;font-weight:400}
+.lb-name:focus{color:var(--amber)}
+.lb-value{font-family:var(--display);font-size:14px;font-weight:700;color:var(--green);text-align:right}
+.lb-bar-wrap{grid-column:1/-1;padding:0 12px 6px;display:none}
+.lb-bar{height:3px;background:var(--surface2);border-radius:2px;margin-top:2px}
+.lb-bar-fill{height:100%;background:var(--green);border-radius:2px;transition:width .4s ease}
+.add-row-btn{width:100%;padding:8px;background:none;border:none;border-top:1px dashed var(--border);color:var(--muted);font-size:11px;font-family:var(--body);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:color .15s,background .15s}
+.add-row-btn:hover{color:var(--amber);background:rgba(245,166,35,.05)}
+.pipeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pipeline-col{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.col-header{padding:10px 12px;border-bottom:1px solid var(--border)}
+.col-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.col-label{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.col-count{font-size:10px;color:var(--muted)}
+.col-total{font-family:var(--display);font-size:18px;font-weight:800}
+.col-closed .col-header{border-top:3px solid var(--green)}.col-early .col-header{border-top:3px solid var(--blue)}.col-late .col-header{border-top:3px solid var(--orange)}.col-closing .col-header{border-top:3px solid var(--red)}
+.col-closed .col-label,.col-closed .col-total{color:var(--green)}.col-early .col-label,.col-early .col-total{color:var(--blue)}.col-late .col-label,.col-late .col-total{color:var(--orange)}.col-closing .col-label,.col-closing .col-total{color:var(--red)}
+.cards{padding:8px;display:flex;flex-direction:column;gap:6px;flex:1;min-height:50px}
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;transition:border-color .15s,opacity .3s}
+.card:hover{border-color:var(--muted)}.card.won{opacity:.45}.card.won .card-company{text-decoration:line-through;color:var(--muted)}
+.card-company{font-size:12px;font-weight:600;color:var(--text);outline:none;display:block;margin-bottom:4px;min-width:10px;white-space:nowrap;overflow:hidden}
+.card-company:empty::before{content:attr(data-ph);color:var(--muted);font-weight:400;font-style:italic}
+.card-company:focus{color:var(--amber)}
+.card-meta{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px}
+.card-value-wrap{display:flex;align-items:center;gap:1px;flex:1}
+.card-dollar{font-family:var(--display);font-size:13px;font-weight:700;color:var(--muted2)}
+.card-value{font-family:var(--display);font-size:15px;font-weight:700;color:var(--text);outline:none;cursor:text;min-width:10px;flex:1}
+.card-value:empty::before{content:attr(data-ph);color:var(--muted);font-size:11px;font-weight:400;font-family:var(--body);font-style:italic}
+.card-value:focus{color:var(--amber)}
+.card-owner{font-size:10px;color:var(--muted2);outline:none;cursor:text;max-width:70px;text-align:right;min-width:10px;white-space:nowrap;overflow:hidden}
+.card-owner:empty::before{content:attr(data-ph);color:var(--muted);font-style:italic}
+.card-owner:focus{color:var(--amber)}
+.card-actions{display:flex;gap:3px;flex-wrap:wrap}
+.btn{font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;border:1px solid;cursor:pointer;background:none;letter-spacing:.05em;text-transform:uppercase;font-family:var(--body);transition:background .15s,color .15s}
+.btn-won{border-color:var(--green-dim);color:var(--green)}.btn-won:hover{background:var(--green-dim)}
+.btn-del{border-color:var(--border);color:var(--muted)}.btn-del:hover{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+.btn-move{border-color:var(--border);color:var(--muted)}.btn-move:hover{background:var(--surface);color:var(--muted2)}
+.add-card-btn{margin:0 8px 8px;padding:6px;background:none;border:1px dashed var(--border);border-radius:5px;color:var(--muted);font-size:11px;font-family:var(--body);cursor:pointer;transition:color .15s,border-color .15s;display:flex;align-items:center;justify-content:center;gap:4px}
+.add-card-btn:hover{color:var(--text);border-color:var(--muted)}
+.col-closed .add-card-btn:hover{color:var(--green);border-color:var(--green)}
+.col-early .add-card-btn:hover{color:var(--blue);border-color:var(--blue)}
+.col-late .add-card-btn:hover{color:var(--orange);border-color:var(--orange)}
+.col-closing .add-card-btn:hover{color:var(--red);border-color:var(--red)}
+.footer{margin-top:4px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:center}
+.footer-stat{display:flex;flex-direction:column;align-items:center;gap:3px}
+.footer-stat-value{font-family:var(--display);font-size:28px;font-weight:800;color:var(--text)}
+.footer-stat-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.footer-stat.green .footer-stat-value{color:var(--green)}
+.footer-stat.orange .footer-stat-value{color:var(--orange)}
+.footer-stat.blue .footer-stat-value{color:var(--blue)}
+.footer-tip{font-size:10px;color:var(--muted);text-align:center;grid-column:1/-1;border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
+.footer-tip span{color:var(--amber)}
 </style>
 </head>
 <body>
-
 <header class="header">
-  <div class="header-left">
-    <div class="header-title">Q2 Sales Scoreboard</div>
-    <div class="header-sub">2026</div>
-  </div>
-  <div class="header-right">
-    <div class="live-badge"><div class="live-dot"></div> Live</div>
-  </div>
+  <div class="header-left"><div class="header-title">Q2 Sales Scoreboard</div><div class="header-sub">2026</div></div>
+  <div class="live-badge"><div class="live-dot"></div> Live</div>
 </header>
-
 <div class="main">
-
   <div class="kpi-row">
-    <div class="kpi amber">
-      <div class="kpi-label">Total Closed</div>
-      <div class="kpi-value" contenteditable="true" spellcheck="false" id="kpi-closed">$0</div>
-      <div class="kpi-sub">Update as deals land</div>
-    </div>
-    <div class="kpi green">
-      <div class="kpi-label">Deals Won</div>
-      <div class="kpi-value" contenteditable="true" spellcheck="false" id="kpi-deals">0</div>
-      <div class="kpi-sub">This quarter</div>
-    </div>
-    <div class="kpi blue">
-      <div class="kpi-label">Pipeline</div>
-      <div class="kpi-value" contenteditable="true" spellcheck="false" id="kpi-pipeline">$0</div>
-      <div class="kpi-sub">Active opportunities</div>
-    </div>
-    <div class="kpi orange">
-      <div class="kpi-label">Quota Target</div>
-      <div class="kpi-value" contenteditable="true" spellcheck="false" id="kpi-quota">$0</div>
-      <div class="kpi-sub">Click to set</div>
-    </div>
+    <div class="kpi amber"><div class="kpi-label">Total Closed</div><div class="kpi-value" id="kpi-closed">$0</div><div class="kpi-sub">Won deals this quarter</div></div>
+    <div class="kpi green"><div class="kpi-label">Deals Won</div><div class="kpi-value" id="kpi-deals">0</div><div class="kpi-sub">Closed this quarter</div></div>
+    <div class="kpi blue"><div class="kpi-label">Pipeline</div><div class="kpi-value" id="kpi-pipeline">$0</div><div class="kpi-sub">Active opportunities</div></div>
+    <div class="kpi orange"><div class="kpi-label">Quota Target</div><div class="kpi-value" contenteditable="true" spellcheck="false" id="kpi-quota">$0</div><div class="kpi-sub">Click to set</div></div>
   </div>
-
   <div class="progress-section">
     <div class="progress-header">
-      <div class="progress-title">ð Race to Quota</div>
-      <div class="progress-pct" id="pct-label">0%</div>
+      <div class="progress-title">Race to Quota</div>
+      <div class="progress-right"><div class="progress-fraction" id="progress-fraction">$0 of $0</div><div class="progress-pct" id="pct-label">0%</div></div>
     </div>
-    <div class="track">
-      <div class="track-fill" id="track-fill" style="width:0%"></div>
-    </div>
-    <div class="track-milestones">
-      <span>0</span><span>25%</span><span>50%</span><span>75%</span><span>ð¯ 100%</span>
-    </div>
+    <div class="track"><div class="track-fill" id="track-fill" style="width:0%"></div></div>
+    <div class="track-milestones"><span>$0</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
   </div>
-
   <div class="body-grid">
-
     <div class="leaderboard">
-      <div class="section-header">
-        <div class="section-title">ð Leaderboard</div>
-      </div>
+      <div class="section-header"><div class="section-title">Leaderboard</div><div class="section-hint">auto-updates</div></div>
       <div id="lb-body"></div>
       <button class="add-row-btn" onclick="addLbRow()">+ Add rep</button>
     </div>
-
-    <div>
-      <div class="pipeline">
-
-        <div class="pipeline-col col-closed">
-          <div class="col-header">
-            <div class="col-label">Closed Won</div>
-            <div class="col-count" id="count-closed">0 deals</div>
-          </div>
-          <div class="cards" id="cards-closed"></div>
-          <button class="add-card-btn" onclick="addCard('closed')">+ Add deal</button>
-        </div>
-
-        <div class="pipeline-col col-early">
-          <div class="col-header">
-            <div class="col-label">Hunting</div>
-            <div class="col-count" id="count-early">0 deals</div>
-          </div>
-          <div class="cards" id="cards-early"></div>
-          <button class="add-card-btn" onclick="addCard('early')">+ Add deal</button>
-        </div>
-
-        <div class="pipeline-col col-late">
-          <div class="col-header">
-            <div class="col-label">Late Stage</div>
-            <div class="col-count" id="count-late">0 deals</div>
-          </div>
-          <div class="cards" id="cards-late"></div>
-          <button class="add-card-btn" onclick="addCard('late')">+ Add deal</button>
-        </div>
-
-        <div class="pipeline-col col-closing">
-          <div class="col-header">
-            <div class="col-label">Closing Now</div>
-            <div class="col-count" id="count-closing">0 deals</div>
-          </div>
-          <div class="cards" id="cards-closing"></div>
-          <button class="add-card-btn" onclick="addCard('closing')">+ Add deal</button>
-        </div>
-
+    <div><div class="pipeline">
+      <div class="pipeline-col col-closed">
+        <div class="col-header"><div class="col-top"><div class="col-label">Closed Won</div><div class="col-count" id="count-closed">0 deals</div></div><div class="col-total" id="total-closed">$0</div></div>
+        <div class="cards" id="cards-closed"></div>
+        <button class="add-card-btn" onclick="addCard('closed')">+ Add deal</button>
       </div>
-    </div>
-
+      <div class="pipeline-col col-early">
+        <div class="col-header"><div class="col-top"><div class="col-label">Hunting</div><div class="col-count" id="count-early">0 deals</div></div><div class="col-total" id="total-early">$0</div></div>
+        <div class="cards" id="cards-early"></div>
+        <button class="add-card-btn" onclick="addCard('early')">+ Add deal</button>
+      </div>
+      <div class="pipeline-col col-late">
+        <div class="col-header"><div class="col-top"><div class="col-label">Late Stage</div><div class="col-count" id="count-late">0 deals</div></div><div class="col-total" id="total-late">$0</div></div>
+        <div class="cards" id="cards-late"></div>
+        <button class="add-card-btn" onclick="addCard('late')">+ Add deal</button>
+      </div>
+      <div class="pipeline-col col-closing">
+        <div class="col-header"><div class="col-top"><div class="col-label">Closing Now</div><div class="col-count" id="count-closing">0 deals</div></div><div class="col-total" id="total-closing">$0</div></div>
+        <div class="cards" id="cards-closing"></div>
+        <button class="add-card-btn" onclick="addCard('closing')">+ Add deal</button>
+      </div>
+    </div></div>
+  </div>
+  <div class="footer">
+    <div class="footer-stat green"><div class="footer-stat-value" id="stat-won-count">0</div><div class="footer-stat-label">Deals Closed</div></div>
+    <div class="footer-stat orange"><div class="footer-stat-value" id="stat-avg">$0</div><div class="footer-stat-label">Avg Deal Size</div></div>
+    <div class="footer-stat blue"><div class="footer-stat-value" id="stat-pipeline-count">0</div><div class="footer-stat-label">In Pipeline</div></div>
+    <div class="footer-tip">All numbers update automatically as you add deals. Click <span>+ Add deal</span> in any column. Enter values as numbers (e.g. 45000) and they format as USD. Mark deals <span>Won</span> to count them toward closed.</div>
   </div>
 </div>
-
-<div class="footer">
-  <div class="footer-note">Q2 . HUNT . CLOSE " WIN</div>
-  <div class="footer-tip">Click any field to edit . <span>Won</span> crosses a deal off . <span>X</span> deletes it</div>
-</div>
-
 <script>
 var COLS = ['closed','early','late','closing'];
-var cardId = 0;
-var lbId = 0;
+var cardId = 0, lbId = 0;
 var RANKS = ['1st','2nd','3rd','4','5','6','7','8','9','10'];
-var COL_LABELS = { closed: 'Closed Won', early: 'Hunting', late: 'Late Stage', closing: 'Closing Now' };
+var COL_LABELS = {closed:'Closed Won',early:'Hunting',late:'Late Stage',closing:'Closing Now'};
+
+function parseDollars(str) {
+  if (!str) return 0;
+  return parseFloat(String(str).replace(/[^0-9.]/g,'')) || 0;
+}
+function fmtUSD(n) {
+  if (n === 0) return '$0';
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(n%1000000===0?0:1) + 'M';
+  if (n >= 1000) return '$' + Math.round(n/1000) + 'K';
+  return '$' + n.toLocaleString('en-US');
+}
+function fmtFull(n) { return '$' + n.toLocaleString('en-US'); }
+
+function recalc() {
+  var wonCards = document.querySelectorAll('.card.won');
+  var allCards = document.querySelectorAll('.card');
+  var totalClosed = 0, dealsWon = 0;
+  wonCards.forEach(function(c) { var v = parseDollars(c.querySelector('.card-value').textContent); totalClosed += v; dealsWon++; });
+  var totalPipeline = 0, pipelineCount = 0;
+  allCards.forEach(function(c) { if (!c.classList.contains('won')) { totalPipeline += parseDollars(c.querySelector('.card-value').textContent); pipelineCount++; } });
+  document.getElementById('kpi-closed').textContent = fmtUSD(totalClosed);
+  document.getElementById('kpi-deals').textContent = dealsWon;
+  document.getElementById('kpi-pipeline').textContent = fmtUSD(totalPipeline);
+  var quota = parseDollars(document.getElementById('kpi-quota').textContent);
+  var pct = quota > 0 ? Math.min(100, Math.round(totalClosed/quota*100)) : 0;
+  document.getElementById('track-fill').style.width = pct + '%';
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('progress-fraction').textContent = fmtUSD(totalClosed) + ' of ' + fmtUSD(quota);
+  COLS.forEach(function(col) {
+    var cc = document.querySelectorAll('#cards-' + col + ' .card');
+    var ct = 0; cc.forEach(function(c) { ct += parseDollars(c.querySelector('.card-value').textContent); });
+    var el = document.getElementById('count-' + col); var tel = document.getElementById('total-' + col);
+    if (el) el.textContent = cc.length + ' deal' + (cc.length !== 1 ? 's' : '');
+    if (tel) tel.textContent = fmtUSD(ct);
+  });
+  document.getElementById('stat-won-count').textContent = dealsWon;
+  document.getElementById('stat-avg').textContent = fmtUSD(dealsWon > 0 ? Math.round(totalClosed/dealsWon) : 0);
+  document.getElementById('stat-pipeline-count').textContent = pipelineCount;
+  updateLeaderboard();
+}
+
+function updateLeaderboard() {
+  var rows = document.querySelectorAll('#lb-body .lb-row');
+  var maxVal = 0;
+  rows.forEach(function(row) {
+    var name = (row.querySelector('.lb-name').textContent || '').trim().toLowerCase();
+    if (!name) return;
+    var total = 0;
+    document.querySelectorAll('.card.won').forEach(function(c) { if ((c.querySelector('.card-owner').textContent||'').trim().toLowerCase() === name) total += parseDollars(c.querySelector('.card-value').textContent); });
+    if (total > maxVal) maxVal = total;
+  });
+  rows.forEach(function(row) {
+    var name = (row.querySelector('.lb-name').textContent || '').trim().toLowerCase();
+    var valEl = row.querySelector('.lb-value');
+    var barFill = row.querySelector('.lb-bar-fill');
+    if (!name) { if (valEl) valEl.textContent = ''; if (barFill) barFill.style.width = '0%'; return; }
+    var total = 0;
+    document.querySelectorAll('.card.won').forEach(function(c) { if ((c.querySelector('.card-owner').textContent||'').trim().toLowerCase() === name) total += parseDollars(c.querySelector('.card-value').textContent); });
+    if (valEl) valEl.textContent = total > 0 ? fmtUSD(total) : '';
+    if (barFill) barFill.style.width = (maxVal > 0 ? Math.round(total/maxVal*100) : 0) + '%';
+  });
+}
 
 function makeLbRow(rank, id) {
-  var rc = rank === 0 ? 'gold' : rank === 1 ? 'silver' : rank === 2 ? 'bronze' : '';
-  var label = RANKS[rank] !== undefined ? RANKS[rank] : (rank + 1).toString();
-  var row = document.createElement('div');
-  row.className = 'lb-row';
-  row.setAttribute('data-lbid', id);
-  var rankDiv = document.createElement('div');
-  rankDiv.className = 'lb-rank ' + rc;
-  rankDiv.textContent = label;
-  var nameDiv = document.createElement('div');
-  nameDiv.className = 'lb-name';
-  nameDiv.contentEditable = 'true';
-  nameDiv.spellcheck = false;
-  nameDiv.setAttribute('data-ph', 'Rep name');
-  var valDiv = document.createElement('div');
-  valDiv.className = 'lb-value';
-  valDiv.contentEditable = 'true';
-  valDiv.spellcheck = false;
-  valDiv.setAttribute('data-ph', '$0');
-  var dealsDiv = document.createElement('div');
-  dealsDiv.className = 'lb-deals';
-  dealsDiv.contentEditable = 'true';
-  dealsDiv.spellcheck = false;
-  dealsDiv.setAttribute('data-ph', '0');
-  var delBtn = document.createElement('button');
-  delBtn.className = 'lb-del';
-  delBtn.textContent = 'X';
-  delBtn.title = 'Remove';
-  delBtn.setAttribute('data-id', id);
+  var rc = rank===0?'gold':rank===1?'silver':rank===2?'bronze':'';
+  var row = document.createElement('div'); row.className = 'lb-row'; row.setAttribute('data-lbid', id);
+  var rankDiv = document.createElement('div'); rankDiv.className = 'lb-rank ' + rc; rankDiv.textContent = RANKS[rank]||String(rank+1);
+  var nameDiv = document.createElement('div'); nameDiv.className = 'lb-name'; nameDiv.contentEditable = 'true'; nameDiv.spellcheck = false; nameDiv.setAttribute('data-ph','Rep name');
+  nameDiv.addEventListener('input', recalc); nameDiv.addEventListener('blur', recalc);
+  var valDiv = document.createElement('div'); valDiv.className = 'lb-value';
+  var delBtn = document.createElement('button'); delBtn.className = 'lb-del'; delBtn.textContent = 'X'; delBtn.title = 'Remove'; delBtn.setAttribute('data-id', id);
   delBtn.onclick = function() { deleteLbRow(parseInt(this.getAttribute('data-id'))); };
-  row.appendChild(rankDiv);
-  row.appendChild(nameDiv);
-  row.appendChild(valDiv);
-  row.appendChild(dealsDiv);
-  row.appendChild(delBtn);
+  var barWrap = document.createElement('div'); barWrap.className = 'lb-bar-wrap';
+  var bar = document.createElement('div'); bar.className = 'lb-bar';
+  var barFill = document.createElement('div'); barFill.className = 'lb-bar-fill'; barFill.style.width = '0%';
+  bar.appendChild(barFill); barWrap.appendChild(bar);
+  row.appendChild(rankDiv); row.appendChild(nameDiv); row.appendChild(valDiv); row.appendChild(delBtn); row.appendChild(barWrap);
   return row;
 }
 
 function deleteLbRow(id) {
   var row = document.querySelector('.lb-row[data-lbid="' + id + '"]');
-  if (row) {
-    row.style.opacity = '0';
-    row.style.transition = 'opacity 0.2s';
-    setTimeout(function() { row.parentNode && row.parentNode.removeChild(row); refreshRanks(); }, 200);
-  }
+  if (row) { row.style.opacity='0'; row.style.transition='opacity .2s'; setTimeout(function(){if(row.parentNode)row.parentNode.removeChild(row);refreshRanks();recalc();},200); }
 }
-
 function refreshRanks() {
   var rows = document.querySelectorAll('#lb-body .lb-row');
-  for (var i = 0; i < rows.length; i++) {
-    var rankEl = rows[i].querySelector('.lb-rank');
-    var label = RANKS[i] !== undefined ? RANKS[i] : (i + 1).toString();
-    rankEl.textContent = label;
-    rankEl.className = 'lb-rank ' + (i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '');
-  }
+  for (var i=0;i<rows.length;i++){var e=rows[i].querySelector('.lb-rank');e.textContent=RANKS[i]||String(i+1);e.className='lb-rank '+(i===0?'gold':i===1?'silver':i===2?'bronze':'');}
 }
-
 function addLbRow() {
-  var body = document.getElementById('lb-body');
-  var rank = body.querySelectorAll('.lb-row').length;
-  if (rank >= 12) return;
-  var row = makeLbRow(rank, lbId);
-  lbId++;
-  body.appendChild(row);
-  row.querySelector('.lb-name').focus();
+  var body = document.getElementById('lb-body'); var rank = body.querySelectorAll('.lb-row').length;
+  if (rank>=12) return; var row = makeLbRow(rank,lbId); lbId++; body.appendChild(row); row.querySelector('.lb-name').focus();
 }
 
 function makeCard(col) {
-  var id = cardId;
-  cardId++;
-  var card = document.createElement('div');
-  card.className = 'card';
-  card.setAttribute('data-cardid', id);
-
-  var company = document.createElement('span');
-  company.className = 'card-company';
-  company.contentEditable = 'true';
-  company.spellcheck = false;
-  company.setAttribute('data-ph', 'Company name');
-
-  var row = document.createElement('div');
-  row.className = 'card-row';
-
-  var value = document.createElement('span');
-  value.className = 'card-value';
-  value.contentEditable = 'true';
-  value.spellcheck = false;
-  value.setAttribute('data-ph', '$value');
-
-  var owner = document.createElement('span');
-  owner.className = 'card-owner';
-  owner.contentEditable = 'true';
-  owner.spellcheck = false;
-  owner.setAttribute('data-ph', 'Owner');
-
-  row.appendChild(value);
-  row.appendChild(owner);
-
-  var actions = document.createElement('div');
-  actions.className = 'card-actions';
-
-  var wonBtn = document.createElement('button');
-  wonBtn.className = 'btn btn-won';
-  wonBtn.textContent = 'Won';
-  wonBtn.setAttribute('data-id', id);
+  var id = cardId++;
+  var card = document.createElement('div'); card.className = 'card'; card.setAttribute('data-cardid', id);
+  var company = document.createElement('span'); company.className = 'card-company'; company.contentEditable = 'true'; company.spellcheck = false; company.setAttribute('data-ph','Company name');
+  company.addEventListener('input', recalc);
+  var metaRow = document.createElement('div'); metaRow.className = 'card-meta';
+  var valWrap = document.createElement('div'); valWrap.className = 'card-value-wrap';
+  var dollar = document.createElement('span'); dollar.className = 'card-dollar'; dollar.textContent = '$';
+  var value = document.createElement('span'); value.className = 'card-value'; value.contentEditable = 'true'; value.spellcheck = false; value.setAttribute('data-ph','value');
+  value.addEventListener('input', recalc);
+  value.addEventListener('blur', function() { var r=parseDollars(this.textContent); if(r>0)this.textContent=r.toLocaleString('en-US'); recalc(); });
+  valWrap.appendChild(dollar); valWrap.appendChild(value);
+  var owner = document.createElement('span'); owner.className = 'card-owner'; owner.contentEditable = 'true'; owner.spellcheck = false; owner.setAttribute('data-ph','Owner');
+  owner.addEventListener('input', recalc); owner.addEventListener('blur', recalc);
+  metaRow.appendChild(valWrap); metaRow.appendChild(owner);
+  var actions = document.createElement('div'); actions.className = 'card-actions';
+  var wonBtn = document.createElement('button'); wonBtn.className = 'btn btn-won'; wonBtn.textContent = 'Won'; wonBtn.setAttribute('data-id', id);
   wonBtn.onclick = function() { markWon(parseInt(this.getAttribute('data-id'))); };
-
-  var delBtn = document.createElement('button');
-  delBtn.className = 'btn btn-del';
-  delBtn.textContent = 'X';
-  delBtn.setAttribute('data-id', id);
+  var delBtn = document.createElement('button'); delBtn.className = 'btn btn-del'; delBtn.textContent = 'X'; delBtn.setAttribute('data-id', id);
   delBtn.onclick = function() { deleteCard(parseInt(this.getAttribute('data-id'))); };
-
   actions.appendChild(wonBtn);
-
-  for (var c = 0; c < COLS.length; c++) {
-    if (COLS[c] !== col) {
-      var moveBtn = document.createElement('button');
-      moveBtn.className = 'btn btn-move';
-      moveBtn.textContent = '-> ' + COL_LABELS[COLS[c]];
-      moveBtn.setAttribute('data-id', id);
-      moveBtn.setAttribute('data-col', COLS[c]);
-      moveBtn.onclick = function() { moveCard(parseInt(this.getAttribute('data-id')), this.getAttribute('data-col')); };
-      actions.appendChild(moveBtn);
+  for (var c=0;c<COLS.length;c++) {
+    if (COLS[c]!==col) {
+      var mb=document.createElement('button'); mb.className='btn btn-move'; mb.textContent='-> '+COL_LABELS[COLS[c]];
+      mb.setAttribute('data-id',id); mb.setAttribute('data-col',COLS[c]);
+      mb.onclick=function(){moveCard(parseInt(this.getAttribute('data-id')),this.getAttribute('data-col'));};
+      actions.appendChild(mb);
     }
   }
-
   actions.appendChild(delBtn);
-
-  card.appendChild(company);
-  card.appendChild(row);
-  card.appendChild(actions);
+  card.appendChild(company); card.appendChild(metaRow); card.appendChild(actions);
   return card;
 }
 
 function addCard(col) {
   var container = document.getElementById('cards-' + col);
-  var card = makeCard(col);
-  container.appendChild(card);
-  card.querySelector('.card-company').focus();
-  updateCounts();
+  var card = makeCard(col); container.appendChild(card); card.querySelector('.card-company').focus(); recalc();
 }
-
 function markWon(id) {
   var card = document.querySelector('.card[data-cardid="' + id + '"]');
-  if (card) {
-    if (card.classList.contains('won')) { card.classList.remove('won'); } else { card.classList.add('won'); }
-    updateCounts();
-  }
+  if (card) { if(card.classList.contains('won'))card.classList.remove('won');else card.classList.add('won'); recalc(); }
 }
-
 function deleteCard(id) {
   var card = document.querySelector('.card[data-cardid="' + id + '"]');
-  if (card) {
-    card.style.opacity = '0';
-    card.style.transition = 'opacity 0.2s';
-    setTimeout(function() { card.parentNode && card.parentNode.removeChild(card); updateCounts(); }, 200);
-  }
+  if (card) { card.style.opacity='0'; card.style.transition='opacity .2s'; setTimeout(function(){if(card.parentNode)card.parentNode.removeChild(card);recalc();},200); }
 }
-
-function moveCard(id, targetCol) {
+function moveCard(id, tc) {
   var card = document.querySelector('.card[data-cardid="' + id + '"]');
   if (!card) return;
-  var company = card.querySelector('.card-company').textContent;
-  var val = card.querySelector('.card-value').textContent;
-  var own = card.querySelector('.card-owner').textContent;
-  card.parentNode.removeChild(card);
-  var newCard = makeCard(targetCol);
-  newCard.querySelector('.card-company').textContent = company;
-  newCard.querySelector('.card-value').textContent = val;
-  newCard.querySelector('.card-owner').textContent = own;
-  document.getElementById('cards-' + targetCol).appendChild(newCard);
-  updateCounts();
+  var co=card.querySelector('.card-company').textContent, va=card.querySelector('.card-value').textContent, ow=card.querySelector('.card-owner').textContent, ww=card.classList.contains('won');
+  if(card.parentNode)card.parentNode.removeChild(card);
+  var n=makeCard(tc); n.querySelector('.card-company').textContent=co; n.querySelector('.card-value').textContent=va; n.querySelector('.card-owner').textContent=ow;
+  if(ww)n.classList.add('won'); document.getElementById('cards-'+tc).appendChild(n); recalc();
 }
 
-function updateCounts() {
-  for (var c = 0; c < COLS.length; c++) {
-    var col = COLS[c];
-    var cards = document.querySelectorAll('#cards-' + col + ' .card');
-    var el = document.getElementById('count-' + col);
-    if (el) el.textContent = cards.length + ' deal' + (cards.length !== 1 ? 's' : '');
-  }
-}
+document.getElementById('kpi-quota').addEventListener('blur', function() {
+  var r=parseDollars(this.textContent); this.textContent=r>0?fmtFull(r):'$0'; recalc();
+});
+document.getElementById('kpi-quota').addEventListener('input', recalc);
 
-function updateProgress() {
-  var closedText = document.getElementById('kpi-closed').textContent.replace(/[^0-9.]/g, '');
-  var quotaText = document.getElementById('kpi-quota').textContent.replace(/[^0-9.]/g, '');
-  var closed = parseFloat(closedText) || 0;
-  var quota = parseFloat(quotaText) || 0;
-  var pct = quota > 0 ? Math.min(100, Math.round(closed / quota * 100)) : 0;
-  document.getElementById('track-fill').style.width = pct + '%';
-  document.getElementById('pct-label').textContent = pct + '%';
-}
-
-document.getElementById('kpi-closed').addEventListener('input', updateProgress);
-document.getElementById('kpi-quota').addEventListener('input', updateProgress);
-
-// Init leaderboard with 5 blank rows
-for (var i = 0; i < 5; i++) {
+(function() {
   var body = document.getElementById('lb-body');
-  body.appendChild(makeLbRow(i, lbId));
-  lbId++;
-}
-
-updateCounts();
+  for (var i=0;i<5;i++){body.appendChild(makeLbRow(i,lbId++));}
+  recalc();
+})();
 </script>
 </body>
 </html>
