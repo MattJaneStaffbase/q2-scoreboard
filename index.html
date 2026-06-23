@@ -62,7 +62,7 @@ html { font-family: var(--body); background: var(--bg); color: var(--text); min-
 .lb-rank { font-family: var(--display); font-size: 18px; font-weight: 800; color: var(--muted); text-align: center; }
 .lb-rank.gold   { color: #FFD700; }
 .lb-rank.silver { color: #C0C0C0; }
-.lb-rank.bronze { color: #CD3F12; }
+.lb-rank.bronze { color: #CD7F32; }
 .lb-name { font-size: 13px; font-weight: 600; color: var(--text); outline: none; cursor: text; min-width: 10px; }
 .lb-name:empty::before { content: attr(data-ph); color: var(--muted); font-style: italic; font-weight: 400; }
 .lb-name:focus { color: var(--amber); }
@@ -183,7 +183,7 @@ html { font-family: var(--body); background: var(--bg); color: var(--text); min-
         <div class="section-title">ð Leaderboard</div>
       </div>
       <div id="lb-body"></div>
-      <button class="add-row-btn" onclick="addLbRow()">ï¼ Add rep</button>
+      <button class="add-row-btn" onclick="addLbRow()">+ Add rep</button>
     </div>
 
     <div>
@@ -191,38 +191,38 @@ html { font-family: var(--body); background: var(--bg); color: var(--text); min-
 
         <div class="pipeline-col col-closed">
           <div class="col-header">
-            <div class="col-label">â Closed Won</div>
+            <div class="col-label">Closed Won</div>
             <div class="col-count" id="count-closed">0 deals</div>
           </div>
           <div class="cards" id="cards-closed"></div>
-          <button class="add-card-btn" onclick="addCard('closed')">ï¼ Add deal</button>
+          <button class="add-card-btn" onclick="addCard('closed')">+ Add deal</button>
         </div>
 
         <div class="pipeline-col col-early">
           <div class="col-header">
-            <div class="col-label">ð¯ Hunting</div>
+            <div class="col-label">Hunting</div>
             <div class="col-count" id="count-early">0 deals</div>
           </div>
           <div class="cards" id="cards-early"></div>
-          <button class="add-card-btn" onclick="addCard('early')">ï¼ Add deal</button>
+          <button class="add-card-btn" onclick="addCard('early')">+ Add deal</button>
         </div>
 
         <div class="pipeline-col col-late">
           <div class="col-header">
-            <div class="col-label">ð¥ Late Stage</div>
+            <div class="col-label">Late Stage</div>
             <div class="col-count" id="count-late">0 deals</div>
           </div>
           <div class="cards" id="cards-late"></div>
-          <button class="add-card-btn" onclick="addCard('late')">ï¼ Add deal</button>
+          <button class="add-card-btn" onclick="addCard('late')">+ Add deal</button>
         </div>
 
         <div class="pipeline-col col-closing">
           <div class="col-header">
-            <div class="col-label">â¡ Closing Now</div>
+            <div class="col-label">Closing Now</div>
             <div class="col-count" id="count-closing">0 deals</div>
           </div>
           <div class="cards" id="cards-closing"></div>
-          <button class="add-card-btn" onclick="addCard('closing')">ï¼ Add deal</button>
+          <button class="add-card-btn" onclick="addCard('closing')">+ Add deal</button>
         </div>
 
       </div>
@@ -232,15 +232,15 @@ html { font-family: var(--body); background: var(--bg); color: var(--text); min-
 </div>
 
 <div class="footer">
-  <div class="footer-note">Q2 Â· HUNT Â· CLOSE Â· WIN</div>
-  <div class="footer-tip">Click any field to edit Â· <span>â Won</span> crosses a deal off Â· <span>â</span> deletes it</div>
+  <div class="footer-note">Q2 . HUNT . CLOSE " WIN</div>
+  <div class="footer-tip">Click any field to edit . <span>Won</span> crosses a deal off . <span>X</span> deletes it</div>
 </div>
 
 <script>
 var COLS = ['closed','early','late','closing'];
 var cardId = 0;
 var lbId = 0;
-var RANKS = ['ð¥','ð¥','ð¥','4','5','6','7','8','9','10'];
+var RANKS = ['1st','2nd','3rd','4','5','6','7','8','9','10'];
 var COL_LABELS = { closed: 'Closed Won', early: 'Hunting', late: 'Late Stage', closing: 'Closing Now' };
 
 function makeLbRow(rank, id) {
@@ -269,7 +269,7 @@ function makeLbRow(rank, id) {
   dealsDiv.setAttribute('data-ph', '0');
   var delBtn = document.createElement('button');
   delBtn.className = 'lb-del';
-  delBtn.textContent = 'â';
+  delBtn.textContent = 'X';
   delBtn.title = 'Remove';
   delBtn.setAttribute('data-id', id);
   delBtn.onclick = function() { deleteLbRow(parseInt(this.getAttribute('data-id'))); };
@@ -346,13 +346,13 @@ function makeCard(col) {
 
   var wonBtn = document.createElement('button');
   wonBtn.className = 'btn btn-won';
-  wonBtn.textContent = 'â Won';
+  wonBtn.textContent = 'Won';
   wonBtn.setAttribute('data-id', id);
   wonBtn.onclick = function() { markWon(parseInt(this.getAttribute('data-id'))); };
 
   var delBtn = document.createElement('button');
   delBtn.className = 'btn btn-del';
-  delBtn.textContent = 'â';
+  delBtn.textContent = 'X';
   delBtn.setAttribute('data-id', id);
   delBtn.onclick = function() { deleteCard(parseInt(this.getAttribute('data-id'))); };
 
@@ -362,7 +362,7 @@ function makeCard(col) {
     if (COLS[c] !== col) {
       var moveBtn = document.createElement('button');
       moveBtn.className = 'btn btn-move';
-      moveBtn.textContent = 'â ' + COL_LABELS[COLS[c]];
+      moveBtn.textContent = '-> ' + COL_LABELS[COLS[c]];
       moveBtn.setAttribute('data-id', id);
       moveBtn.setAttribute('data-col', COLS[c]);
       moveBtn.onclick = function() { moveCard(parseInt(this.getAttribute('data-id')), this.getAttribute('data-col')); };
