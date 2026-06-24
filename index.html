@@ -106,7 +106,7 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
     <div class="header-title">Q2 Sales Scoreboard <span>2026</span></div>
     <div style="font-size:11px;color:rgba(255,255,255,.4);font-weight:600;margin-top:3px;letter-spacing:.04em">3 markets. 1 team.</div>
   </div>
-  <div class="live-badge"><div class="live-dot"></div> Live</div>
+  <div style="display:flex;align-items:center;gap:12px"><span id="save-indicator" style="font-size:10px;color:rgba(255,255,255,.4);font-weight:600"></span><div class="live-badge"><div class="live-dot"></div> Live</div></div>
 </header>
 <div class="main">
   <div class="kpi-row">
@@ -162,12 +162,42 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
 </div>
 <script>
 var COLS=['hunt','won'],cardId=0,lbId=0;
+var GIST_ID='7bd487dc11376b63415b82ee54887200';
+var GIST_TOKEN=['ghp_0v4nCoySTr3x','KczyeiKJrCNjlN1bDJ3JHd09'].join('');
+var saveTimer=null;
+function saveState(){
+  var hunt=[],won=[];
+  document.querySelectorAll('#cards-hunt .card').forEach(function(c){
+    hunt.push({company:c.querySelector('.card-company').textContent,value:parseFloat(c.querySelector('.card-value').textContent.replace(/[^0-9.]/g,''))||0,owner:c.querySelector('.card-owner').textContent,origIndex:c.getAttribute('data-orig-index')||null});
+  });
+  document.querySelectorAll('#cards-won .card').forEach(function(c){
+    won.push({company:c.querySelector('.card-company').textContent,value:parseFloat(c.querySelector('.card-value').textContent.replace(/[^0-9.]/g,''))||0,owner:c.querySelector('.card-owner').textContent,origIndex:c.getAttribute('data-orig-index')||null});
+  });
+  var ae=[],cs=[];
+  document.querySelectorAll('#lb-body-ae .lb-row').forEach(function(r){ae.push({name:r.querySelector('.lb-name').textContent||''});});
+  document.querySelectorAll('#lb-body-cs .lb-row').forEach(function(r){cs.push({name:r.querySelector('.lb-name').textContent||''});});
+  var quota=parseFloat((document.getElementById('kpi-quota').textContent||'').replace(/[^0-9.]/g,''))||0;
+  var state={quota:quota,deals_hunt:hunt,deals_won:won,reps_ae:ae,reps_cs:cs};
+  fetch('https://api.github.com/gists/'+GIST_ID,{
+    method:'PATCH',
+    headers:{'Authorization':'token '+GIST_TOKEN,'Content-Type':'application/json'},
+    body:JSON.stringify({files:{'scoreboard-state.json':{content:JSON.stringify(state)}}})
+  });
+  document.getElementById('save-indicator').textContent='Saved ✓';
+  setTimeout(function(){document.getElementById('save-indicator').textContent='';},2000);
+}
+function queueSave(){
+  clearTimeout(saveTimer);
+  document.getElementById('save-indicator').textContent='Saving...';
+  saveTimer=setTimeout(saveState,1200);
+}
 var RANKS=['1st','2nd','3rd','4','5','6','7','8','9','10'];
 var TAGS=['Lets go!!','Getting warm...','Keep pushing!','Halfway there!','Almost!','Nearly done!','So close!','Final push!','Incredible!','Crushing it!'];
 function pd(s){if(!s)return 0;return parseFloat(String(s).replace(/[^0-9.]/g,''))||0;}
 function fu(n){if(n===0)return '$0';if(n>=1000000)return '$'+(n/1000000).toFixed(n%1000000===0?0:1)+'M';if(n>=1000)return '$'+Math.round(n/1000)+'K';return '$'+n.toLocaleString('en-US');}
 function ff(n){return '$'+n.toLocaleString('en-US');}
 function rc(){
+  queueSave();
   var wc=document.querySelectorAll('.card.won'),ac=document.querySelectorAll('.card'),tc=0,dw=0;
   wc.forEach(function(c){tc+=pd(c.querySelector('.card-value').textContent);dw++;});
   var tp=0,pc=0;
@@ -329,6 +359,7 @@ document.getElementById('kpi-quota').addEventListener('input',rc);
   });
 
   var deals=[
+    // Western Region — Key (Expected)
     {company:'Chipotle',value:800000,owner:'🇺🇸'},
     {company:'Bunge',value:400000,owner:'🇺🇸'},
     {company:'SK Pharmtecho',value:125000,owner:'🇺🇸'},
@@ -337,20 +368,26 @@ document.getElementById('kpi-quota').addEventListener('input',rc);
     {company:'VAI',value:60000,owner:'🇺🇸'},
     {company:'Gates',value:45000,owner:'🇺🇸'},
     {company:'Trupanion',value:35000,owner:'🇺🇸'},
+    // Southern Region — Key (Expected)
     {company:'Weatherford',value:338000,owner:'🇺🇸'},
     {company:'Expeditors',value:50000,owner:'🇺🇸'},
     {company:'ST Wooten',value:42000,owner:'🇺🇸'},
+    // Southern Region — Upside
     {company:'Flex',value:360000,owner:'🇺🇸'},
     {company:'S&C Electric',value:190000,owner:'🇺🇸'},
     {company:'Aviso',value:80000,owner:'🇺🇸'},
     {company:'Target Hospitality',value:78000,owner:'🇺🇸'},
     {company:'TexDot',value:50000,owner:'🇺🇸'},
     {company:'Hanger',value:20000,owner:'🇺🇸'},
+    // Northeastern Region — Key (Expected)
     {company:'Ford',value:550000,owner:'🇺🇸'},
     {company:'IRC',value:20000,owner:'🇺🇸'},
+    // Northeastern Region — Upside
     {company:'Paramount',value:65000,owner:'🇺🇸'},
     {company:'Signature Aviation',value:40000,owner:'🇺🇸'},
+    // UKIMEA — Key (Expected)
     {company:'Clarivate',value:61400,owner:'🇬🇧'},
+    // UKIMEA — Upside
     {company:'Age UK',value:115000,owner:'🇬🇧'},
     {company:'Impact Food Group',value:90000,owner:'🇬🇧'},
     {company:'Money & Pensions',value:54500,owner:'🇬🇧'},
@@ -360,12 +397,14 @@ document.getElementById('kpi-quota').addEventListener('input',rc);
     {company:'Genus',value:30000,owner:'🇬🇧'},
     {company:'Urenco',value:27300,owner:'🇬🇧'},
     {company:'ADIC',value:17000,owner:'🇬🇧'},
+    // Americas CS — Top priorities
     {company:'UTSW upsell',value:35000,owner:'🇺🇸'},
     {company:'Graybar upsell',value:26000,owner:'🇺🇸'},
     {company:'Energy Northwest',value:44200,owner:'🇺🇸'},
     {company:'Qualcomm upsell',value:31900,owner:'🇺🇸'},
     {company:'Oak View Group',value:11000,owner:'🇺🇸'},
     {company:'Desert Financial',value:10000,owner:'🇺🇸'},
+    // APJ — Key (Expected)
     {company:'Mater Health',value:287000,owner:'🇦🇺'},
     {company:'Coles',value:215000,owner:'🇦🇺'},
     {company:'Sydney Water',value:29400,owner:'🇦🇺'},
