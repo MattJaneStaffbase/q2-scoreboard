@@ -211,11 +211,9 @@ function render(state){
 }
 
 function poll(){
-  fetch('https://api.github.com/gists/'+GIST_ID)
+  fetch('https://gist.githubusercontent.com/MattJaneStaffbase/459169b9031b885b85203f7585993ae8/raw/scoreboard-state.json?nocache='+Date.now())
     .then(function(r){return r.json();})
-    .then(function(d){
-      var raw=d.files['scoreboard-state.json'].content;
-      var state=JSON.parse(raw);
+    .then(function(state){
       render(state);
       var now=new Date();
       document.getElementById('sync-bar').textContent='Last updated: '+now.toLocaleTimeString();
