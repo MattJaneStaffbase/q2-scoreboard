@@ -10,50 +10,52 @@
 :root{
   --white:#FFFFFF;--light-gray:#F3F3F3;--mid-gray:#D9D9D9;--dark-gray:#9B9B9B;
   --dark-blue:#090D48;--sb-blue:#23B4FF;--orange:#FF9600;--orange-hover:#E46F03;
-  --mid-blue:#006CFF;--purple:#7A47D1;--border:#E8E8E8;
-  --shadow:0 1px 4px rgba(9,13,72,.08);--shadow-md:0 2px 12px rgba(9,13,72,.1);
+  --mid-blue:#006CFF;--green:#57FF8F;--border:#E8E8E8;
+  --shadow:0 1px 4px rgba(9,13,72,.08);
   --epilogue:'Epilogue',sans-serif;--inter:'Inter',sans-serif;
 }
 html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue);min-height:100vh}
-.header{background:var(--white);border-bottom:1px solid var(--border);padding:14px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
-.header-left{display:flex;align-items:baseline;gap:10px}
-.header-title{font-family:var(--epilogue);font-size:22px;font-weight:800;color:var(--dark-blue);letter-spacing:-.02em}
+.header{background:var(--dark-blue);padding:16px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(9,13,72,.25)}
+.header-left{display:flex;align-items:baseline;gap:12px}
+.header-title{font-family:var(--epilogue);font-size:24px;font-weight:800;color:var(--white);letter-spacing:-.02em}
 .header-title span{color:var(--sb-blue)}
-.header-sub{font-family:var(--inter);font-size:12px;font-weight:700;color:var(--dark-gray);letter-spacing:.08em;text-transform:uppercase}
-.live-badge{display:flex;align-items:center;gap:6px;background:rgba(35,180,255,.08);border:1px solid rgba(35,180,255,.3);color:var(--sb-blue);font-size:11px;font-weight:700;letter-spacing:.1em;padding:4px 12px;border-radius:30px;text-transform:uppercase;font-family:var(--inter)}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--sb-blue);animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.main{padding:22px 36px;display:grid;gap:14px;max-width:1600px;margin:0 auto}
+.live-badge{display:flex;align-items:center;gap:7px;background:rgba(87,255,143,.12);border:1px solid rgba(87,255,143,.4);color:#57FF8F;font-size:11px;font-weight:700;letter-spacing:.1em;padding:5px 14px;border-radius:30px;text-transform:uppercase;font-family:var(--inter)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#57FF8F;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.main{padding:24px 36px;display:grid;gap:16px;max-width:1400px;margin:0 auto}
 .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.kpi{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 22px;display:flex;flex-direction:column;gap:4px;box-shadow:var(--shadow)}
+.kpi{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px 22px;display:flex;flex-direction:column;gap:4px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--mid-gray)}
+.kpi.blue::after{background:var(--sb-blue)}.kpi.green-kpi::after{background:#57FF8F}.kpi.orange::after{background:var(--orange)}
 .kpi-label{font-family:var(--inter);font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--dark-gray);text-transform:uppercase}
 .kpi-value{font-family:var(--epilogue);font-size:34px;font-weight:800;line-height:1.1;color:var(--dark-blue)}
-.kpi.blue .kpi-value{color:var(--sb-blue)}
-.kpi.orange .kpi-value{color:var(--orange);outline:none;cursor:text}
+.kpi.blue .kpi-value{color:var(--sb-blue)}.kpi.green-kpi .kpi-value{color:#2DD968}
+.kpi.orange .kpi-value{color:var(--orange);outline:none;cursor:text;min-width:20px}
 .kpi.orange .kpi-value:focus{border-bottom:2px solid var(--orange)}
-.kpi-sub{font-size:11px;color:var(--dark-gray);margin-top:1px}
-.progress-section{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 24px;box-shadow:var(--shadow)}
-.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.progress-title{font-family:var(--epilogue);font-size:15px;font-weight:800;color:var(--dark-blue)}
-.progress-right{display:flex;align-items:center;gap:14px}
-.progress-pct{font-family:var(--epilogue);font-size:20px;font-weight:800;color:var(--orange)}
-.progress-fraction{font-size:12px;color:var(--dark-gray);font-weight:600}
-.track{height:14px;background:var(--light-gray);border-radius:30px;overflow:visible;position:relative;border:1px solid var(--mid-gray)}
+.kpi-sub{font-size:11px;color:var(--dark-gray);margin-top:2px}
+.kpi-emoji{font-size:22px;position:absolute;top:14px;right:16px;opacity:.25}
+.progress-section{background:var(--dark-blue);border-radius:14px;padding:20px 26px;box-shadow:0 4px 20px rgba(9,13,72,.18)}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.progress-title{font-family:var(--epilogue);font-size:16px;font-weight:800;color:var(--white)}
+.progress-right{display:flex;align-items:center;gap:16px}
+.progress-pct{font-family:var(--epilogue);font-size:24px;font-weight:800;color:var(--orange)}
+.progress-fraction{font-size:12px;color:rgba(255,255,255,.45);font-weight:600}
+.track{height:16px;background:rgba(255,255,255,.08);border-radius:30px;overflow:visible;position:relative;border:1px solid rgba(255,255,255,.1)}
 .track-fill{height:100%;background:linear-gradient(90deg,var(--sb-blue),var(--mid-blue));border-radius:30px;transition:width .6s ease;position:relative;min-width:0}
-.track-fill::after{content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:var(--orange);border:2px solid var(--white);box-shadow:0 0 0 2px var(--orange)}
-.track-milestones{display:flex;justify-content:space-between;margin-top:6px}
-.track-milestones span{font-size:10px;color:var(--dark-gray);font-weight:600}
-.body-grid{display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start}
-.leaderboard{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
-.section-header{padding:13px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-.section-title{font-family:var(--epilogue);font-size:14px;font-weight:800;color:var(--dark-blue)}
+.track-fill::after{content:'';position:absolute;right:-7px;top:50%;transform:translateY(-50%);width:16px;height:16px;border-radius:50%;background:var(--orange);border:2px solid var(--dark-blue);box-shadow:0 0 0 2px var(--orange)}
+.track-milestones{display:flex;justify-content:space-between;margin-top:8px}
+.track-milestones span{font-size:10px;color:rgba(255,255,255,.3);font-weight:600}
+.track-tagline{font-size:11px;color:rgba(255,255,255,.35);margin-top:10px;font-style:italic}
+.body-grid{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start}
+.leaderboard{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.section-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.section-title{font-family:var(--epilogue);font-size:15px;font-weight:800;color:var(--dark-blue)}
 .section-hint{font-size:10px;color:var(--sb-blue);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.lb-row{display:grid;grid-template-columns:30px 1fr 78px 24px;align-items:center;gap:6px;padding:9px 16px;border-bottom:1px solid var(--border);transition:background .12s}
-.lb-row:last-child{border-bottom:none}
-.lb-row:hover{background:rgba(35,180,255,.04)}
+.lb-row{display:grid;grid-template-columns:30px 1fr 78px 24px;align-items:center;gap:6px;padding:10px 16px;border-bottom:1px solid var(--border);transition:background .12s}
+.lb-row:last-child{border-bottom:none}.lb-row:hover{background:rgba(35,180,255,.04)}
 .lb-del{background:none;border:none;color:var(--mid-gray);cursor:pointer;font-size:12px;padding:2px 4px;border-radius:4px;opacity:0;transition:opacity .12s,color .12s}
 .lb-row:hover .lb-del{opacity:1}.lb-del:hover{color:#FF475D}
-.lb-rank{font-family:var(--epilogue);font-size:14px;font-weight:800;color:var(--mid-gray);text-align:center}
+.lb-rank{font-family:var(--epilogue);font-size:15px;font-weight:800;color:var(--mid-gray);text-align:center}
 .lb-rank.gold{color:#F5A623}.lb-rank.silver{color:#9B9B9B}.lb-rank.bronze{color:#C97B3A}
 .lb-name{font-size:13px;font-weight:600;color:var(--dark-blue);outline:none;cursor:text;min-width:10px;white-space:nowrap;overflow:hidden}
 .lb-name:empty::before{content:attr(data-ph);color:var(--mid-gray);font-style:italic;font-weight:400}
@@ -61,63 +63,62 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
 .lb-value{font-family:var(--epilogue);font-size:14px;font-weight:800;color:var(--sb-blue);text-align:right}
 .add-row-btn{width:100%;padding:10px;background:none;border:none;border-top:1px dashed var(--mid-gray);color:var(--dark-gray);font-size:12px;font-family:var(--inter);font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:color .12s,background .12s}
 .add-row-btn:hover{color:var(--sb-blue);background:rgba(35,180,255,.04)}
-.pipeline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.pipeline-col{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
-.col-header{padding:12px 14px;border-bottom:1px solid var(--border)}
-.col-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.pipeline{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pipeline-col{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.col-hunt .col-header{border-top:4px solid var(--mid-blue);background:linear-gradient(135deg,rgba(0,108,255,.04) 0%,var(--white) 60%)}
+.col-hunt .col-label{color:var(--mid-blue)}.col-hunt .col-total{color:var(--mid-blue)}.col-hunt .col-tagline{color:rgba(0,108,255,.5)}
+.col-won .col-header{border-top:4px solid #2DD968;background:linear-gradient(135deg,rgba(45,217,104,.05) 0%,var(--white) 60%)}
+.col-won .col-label{color:#2DD968}.col-won .col-total{color:#2DD968}.col-won .col-tagline{color:rgba(45,217,104,.5)}
+.col-header{padding:14px 16px;border-bottom:1px solid var(--border)}
+.col-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
 .col-label{font-family:var(--inter);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
 .col-count{font-size:10px;color:var(--dark-gray);font-weight:600}
-.col-total{font-family:var(--epilogue);font-size:20px;font-weight:800;color:var(--dark-blue)}
-.col-closed .col-header{border-top:3px solid var(--sb-blue)}.col-closed .col-label{color:var(--sb-blue)}.col-closed .col-total{color:var(--sb-blue)}
-.col-early .col-header{border-top:3px solid var(--mid-blue)}.col-early .col-label{color:var(--mid-blue)}.col-early .col-total{color:var(--mid-blue)}
-.col-late .col-header{border-top:3px solid var(--purple)}.col-late .col-label{color:var(--purple)}.col-late .col-total{color:var(--purple)}
-.col-closing .col-header{border-top:3px solid var(--orange)}.col-closing .col-label{color:var(--orange)}.col-closing .col-total{color:var(--orange)}
-.cards{padding:8px;display:flex;flex-direction:column;gap:6px;flex:1;min-height:50px}
-.card{background:var(--light-gray);border:1px solid var(--border);border-radius:8px;padding:10px 12px;transition:border-color .12s,box-shadow .12s}
-.card:hover{border-color:var(--sb-blue);box-shadow:0 0 0 3px rgba(35,180,255,.12)}
-.card.won{opacity:.5}.card.won .card-company{text-decoration:line-through;color:var(--dark-gray)}
-.card-company{font-size:12px;font-weight:700;color:var(--dark-blue);outline:none;display:block;margin-bottom:5px;min-width:10px;white-space:nowrap;overflow:hidden}
+.col-total{font-family:var(--epilogue);font-size:26px;font-weight:800;line-height:1.1}
+.col-tagline{font-size:10px;font-style:italic;margin-top:2px}
+.cards{padding:10px;display:flex;flex-direction:column;gap:8px;flex:1;min-height:80px}
+.card{background:var(--light-gray);border:1px solid var(--border);border-radius:10px;padding:11px 13px;transition:border-color .12s,box-shadow .12s,transform .12s}
+.card:hover{border-color:var(--sb-blue);box-shadow:0 0 0 3px rgba(35,180,255,.1);transform:translateY(-1px)}
+.card.won{opacity:.55;transform:none!important}.card.won .card-company{text-decoration:line-through;color:var(--dark-gray)}
+.card-company{font-size:13px;font-weight:700;color:var(--dark-blue);outline:none;display:block;margin-bottom:6px;min-width:10px;white-space:nowrap;overflow:hidden}
 .card-company:empty::before{content:attr(data-ph);color:var(--mid-gray);font-weight:400;font-style:italic}
 .card-company:focus{color:var(--sb-blue)}
-.card-meta{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px}
+.card-meta{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:8px}
 .card-value-wrap{display:flex;align-items:center;gap:1px;flex:1}
 .card-dollar{font-family:var(--epilogue);font-size:13px;font-weight:700;color:var(--dark-gray)}
-.card-value{font-family:var(--epilogue);font-size:16px;font-weight:800;color:var(--dark-blue);outline:none;cursor:text;min-width:10px;flex:1}
+.card-value{font-family:var(--epilogue);font-size:17px;font-weight:800;color:var(--dark-blue);outline:none;cursor:text;min-width:10px;flex:1}
 .card-value:empty::before{content:attr(data-ph);color:var(--mid-gray);font-size:12px;font-weight:400;font-family:var(--inter);font-style:italic}
 .card-value:focus{color:var(--sb-blue)}
-.card-owner{font-size:10px;color:var(--dark-gray);outline:none;cursor:text;max-width:70px;text-align:right;min-width:10px;white-space:nowrap;overflow:hidden;font-weight:600}
+.card-owner{font-size:11px;color:var(--dark-gray);outline:none;cursor:text;max-width:80px;text-align:right;min-width:10px;white-space:nowrap;overflow:hidden;font-weight:600}
 .card-owner:empty::before{content:attr(data-ph);color:var(--mid-gray);font-style:italic;font-weight:400}
 .card-owner:focus{color:var(--sb-blue)}
 .card-actions{display:flex;gap:4px;flex-wrap:wrap}
-.btn{font-size:10px;font-weight:700;padding:3px 8px;border-radius:30px;border:1.5px solid;cursor:pointer;background:none;letter-spacing:.06em;text-transform:uppercase;font-family:var(--inter);transition:background .12s,color .12s}
-.btn-won{border-color:rgba(35,180,255,.4);color:var(--sb-blue)}.btn-won:hover{background:var(--sb-blue);color:var(--white)}
+.btn{font-size:10px;font-weight:700;padding:3px 10px;border-radius:30px;border:1.5px solid;cursor:pointer;background:none;letter-spacing:.06em;text-transform:uppercase;font-family:var(--inter);transition:background .12s,color .12s,transform .1s}
+.btn:active{transform:scale(.95)}
+.btn-won{border-color:rgba(45,217,104,.5);color:#2DD968}.btn-won:hover{background:#2DD968;color:var(--white);border-color:#2DD968}
 .btn-del{border-color:var(--mid-gray);color:var(--dark-gray)}.btn-del:hover{background:#FF475D;border-color:#FF475D;color:var(--white)}
-.btn-move{border-color:var(--mid-gray);color:var(--dark-gray)}.btn-move:hover{background:var(--light-gray);color:var(--dark-blue);border-color:var(--dark-gray)}
-.add-card-btn{margin:0 8px 8px;padding:8px 14px;background:var(--orange);border:none;border-radius:30px;color:var(--dark-blue);font-size:11px;font-family:var(--inter);font-weight:700;cursor:pointer;transition:background .12s;display:flex;align-items:center;justify-content:center;gap:5px;letter-spacing:.06em;text-transform:uppercase}
-.add-card-btn:hover{background:var(--orange-hover)}
-.footer{background:var(--dark-blue);border-radius:12px;padding:20px 28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:center}
-.footer-stat{display:flex;flex-direction:column;align-items:center;gap:4px}
-.footer-stat-value{font-family:var(--epilogue);font-size:30px;font-weight:800;color:var(--white)}
-.footer-stat-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.45);text-transform:uppercase}
-.footer-stat.sb .footer-stat-value{color:var(--sb-blue)}
-.footer-stat.or .footer-stat-value{color:var(--orange)}
-.footer-tip{font-size:10px;color:rgba(255,255,255,.35);text-align:center;grid-column:1/-1;border-top:1px solid rgba(255,255,255,.08);padding-top:12px;margin-top:2px}
-.footer-tip span{color:var(--orange)}
+.btn-move{border-color:rgba(0,108,255,.3);color:var(--mid-blue)}.btn-move:hover{background:var(--mid-blue);color:var(--white);border-color:var(--mid-blue)}
+.add-card-btn{margin:0 10px 10px;padding:9px 16px;background:var(--orange);border:none;border-radius:30px;color:var(--dark-blue);font-size:11px;font-family:var(--inter);font-weight:700;cursor:pointer;transition:background .12s,transform .1s;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 2px 8px rgba(255,150,0,.25)}
+.add-card-btn:hover{background:var(--orange-hover);transform:translateY(-1px)}.add-card-btn:active{transform:scale(.97)}
+.footer{background:var(--dark-blue);border-radius:14px;padding:22px 32px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:center}
+.footer-stat{display:flex;flex-direction:column;align-items:center;gap:5px}
+.footer-stat-value{font-family:var(--epilogue);font-size:32px;font-weight:800;color:var(--white)}
+.footer-stat-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.4);text-transform:uppercase}
+.footer-stat.sb .footer-stat-value{color:var(--sb-blue)}.footer-stat.or .footer-stat-value{color:var(--orange)}.footer-stat.gr .footer-stat-value{color:#57FF8F}
+.footer-tip{font-size:10px;color:rgba(255,255,255,.3);text-align:center;grid-column:1/-1;border-top:1px solid rgba(255,255,255,.07);padding-top:12px;margin-top:2px;line-height:1.6}
+.footer-tip span{color:var(--orange);font-weight:700}
 </style>
 </head>
 <body>
 <header class="header">
-  <div class="header-left">
-    <div class="header-title">Q2 Sales Scoreboard <span>2026</span></div>
-  </div>
+  <div class="header-left"><div class="header-title">Q2 Sales Scoreboard <span>2026</span></div></div>
   <div class="live-badge"><div class="live-dot"></div> Live</div>
 </header>
 <div class="main">
   <div class="kpi-row">
-    <div class="kpi blue"><div class="kpi-label">Total closed</div><div class="kpi-value" id="kpi-closed">$0</div><div class="kpi-sub">Won deals this quarter</div></div>
-    <div class="kpi"><div class="kpi-label">Deals won</div><div class="kpi-value" id="kpi-deals">0</div><div class="kpi-sub">Closed this quarter</div></div>
-    <div class="kpi"><div class="kpi-label">Pipeline</div><div class="kpi-value" id="kpi-pipeline">$0</div><div class="kpi-sub">Active opportunities</div></div>
-    <div class="kpi orange"><div class="kpi-label">Quota target</div><div class="kpi-value" contenteditable="true" spellcheck="false" id="kpi-quota">$0</div><div class="kpi-sub">Click to set</div></div>
+    <div class="kpi blue"><div class="kpi-emoji">💰</div><div class="kpi-label">Total closed</div><div class="kpi-value" id="kpi-closed">$0</div><div class="kpi-sub">Deals in the bag</div></div>
+    <div class="kpi green-kpi"><div class="kpi-emoji">🏆</div><div class="kpi-label">Deals won</div><div class="kpi-value" id="kpi-deals">0</div><div class="kpi-sub">This quarter</div></div>
+    <div class="kpi"><div class="kpi-emoji">🎯</div><div class="kpi-label">Hunting</div><div class="kpi-value" id="kpi-pipeline">$0</div><div class="kpi-sub">Active pipeline value</div></div>
+    <div class="kpi orange"><div class="kpi-emoji">🚀</div><div class="kpi-label">Quota target</div><div class="kpi-value" contenteditable="true" spellcheck="false" id="kpi-quota">$0</div><div class="kpi-sub">Click to set</div></div>
   </div>
   <div class="progress-section">
     <div class="progress-header">
@@ -125,48 +126,48 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
       <div class="progress-right"><div class="progress-fraction" id="progress-fraction">$0 of $0</div><div class="progress-pct" id="pct-label">0%</div></div>
     </div>
     <div class="track"><div class="track-fill" id="track-fill" style="width:0%"></div></div>
-    <div class="track-milestones"><span>$0</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+    <div class="track-milestones"><span>$0</span><span>25%</span><span>50%</span><span>75%</span><span>Let's go!</span></div>
+    <div class="track-tagline" id="track-tagline">Set a quota target above and start adding deals below.</div>
   </div>
   <div class="body-grid">
     <div class="leaderboard">
-      <div class="section-header"><div class="section-title">Leaderboard</div><div class="section-hint">auto-updates</div></div>
+      <div class="section-header"><div class="section-title">Who's killing it</div><div class="section-hint">auto-updates</div></div>
       <div id="lb-body"></div>
       <button class="add-row-btn" onclick="addLbRow()">+ Add rep</button>
     </div>
     <div><div class="pipeline">
-      <div class="pipeline-col col-closed">
-        <div class="col-header"><div class="col-top"><div class="col-label">Closed won</div><div class="col-count" id="count-closed">0 deals</div></div><div class="col-total" id="total-closed">$0</div></div>
-        <div class="cards" id="cards-closed"></div>
-        <button class="add-card-btn" onclick="addCard('closed')">+ Add deal</button>
+      <div class="pipeline-col col-hunt">
+        <div class="col-header">
+          <div class="col-top"><div class="col-label">Hunting</div><div class="col-count" id="count-hunt">0 deals</div></div>
+          <div class="col-total" id="total-hunt">$0</div>
+          <div class="col-tagline">In progress — keep pushing</div>
+        </div>
+        <div class="cards" id="cards-hunt"></div>
+        <button class="add-card-btn" onclick="addCard('hunt')">+ Add deal</button>
       </div>
-      <div class="pipeline-col col-early">
-        <div class="col-header"><div class="col-top"><div class="col-label">Hunting</div><div class="col-count" id="count-early">0 deals</div></div><div class="col-total" id="total-early">$0</div></div>
-        <div class="cards" id="cards-early"></div>
-        <button class="add-card-btn" onclick="addCard('early')">+ Add deal</button>
-      </div>
-      <div class="pipeline-col col-late">
-        <div class="col-header"><div class="col-top"><div class="col-label">Late stage</div><div class="col-count" id="count-late">0 deals</div></div><div class="col-total" id="total-late">$0</div></div>
-        <div class="cards" id="cards-late"></div>
-        <button class="add-card-btn" onclick="addCard('late')">+ Add deal</button>
-      </div>
-      <div class="pipeline-col col-closing">
-        <div class="col-header"><div class="col-top"><div class="col-label">Closing now</div><div class="col-count" id="count-closing">0 deals</div></div><div class="col-total" id="total-closing">$0</div></div>
-        <div class="cards" id="cards-closing"></div>
-        <button class="add-card-btn" onclick="addCard('closing')">+ Add deal</button>
+      <div class="pipeline-col col-won">
+        <div class="col-header">
+          <div class="col-top"><div class="col-label">Closed won</div><div class="col-count" id="count-won">0 deals</div></div>
+          <div class="col-total" id="total-won">$0</div>
+          <div class="col-tagline">Locked in. Nice work.</div>
+        </div>
+        <div class="cards" id="cards-won"></div>
+        <button class="add-card-btn" onclick="addCard('won')">+ Add deal</button>
       </div>
     </div></div>
   </div>
   <div class="footer">
-    <div class="footer-stat sb"><div class="footer-stat-value" id="stat-won-count">0</div><div class="footer-stat-label">Deals closed</div></div>
+    <div class="footer-stat gr"><div class="footer-stat-value" id="stat-won-count">0</div><div class="footer-stat-label">Deals closed</div></div>
     <div class="footer-stat or"><div class="footer-stat-value" id="stat-avg">$0</div><div class="footer-stat-label">Avg deal size</div></div>
-    <div class="footer-stat"><div class="footer-stat-value" id="stat-pipeline-count">0</div><div class="footer-stat-label">In pipeline</div></div>
-    <div class="footer-tip">All numbers update automatically as you add deals. Click <span>+ Add deal</span> in any column. Enter values as numbers and they format as USD. Mark deals <span>Won</span> to count toward closed.</div>
+    <div class="footer-stat sb"><div class="footer-stat-value" id="stat-hunt-count">0</div><div class="footer-stat-label">Still hunting</div></div>
+    <div class="footer-tip">Add deals to <span>Hunting</span>, enter a value, assign an owner — everything updates automatically. Hit <span>Won</span> on a deal when it closes and watch the numbers move.</div>
   </div>
 </div>
 <script>
-var COLS=['closed','early','late','closing'],cardId=0,lbId=0;
+var COLS=['hunt','won'],cardId=0,lbId=0;
 var RANKS=['1st','2nd','3rd','4','5','6','7','8','9','10'];
-var COL_LABELS={closed:'Closed won',early:'Hunting',late:'Late stage',closing:'Closing now'};
+var COL_LABELS={hunt:'Hunting',won:'Closed won'};
+var TAGLINES=['Let's go!!','Getting warm...','Keep pushing!','Halfway there!','Almost!','Nearly done!','So close!','Final push!','Incredible!','Crushing it!'];
 function parseDollars(s){if(!s)return 0;return parseFloat(String(s).replace(/[^0-9.]/g,''))||0;}
 function fmtUSD(n){if(n===0)return '$0';if(n>=1000000)return '$'+(n/1000000).toFixed(n%1000000===0?0:1)+'M';if(n>=1000)return '$'+Math.round(n/1000)+'K';return '$'+n.toLocaleString('en-US');}
 function fmtFull(n){return '$'+n.toLocaleString('en-US');}
@@ -183,6 +184,10 @@ function recalc(){
   document.getElementById('track-fill').style.width=pct+'%';
   document.getElementById('pct-label').textContent=pct+'%';
   document.getElementById('progress-fraction').textContent=fmtUSD(tc)+' of '+fmtUSD(q);
+  var tl=document.getElementById('track-tagline');
+  if(q>0&&tc>0){tl.textContent=TAGLINES[Math.min(Math.floor(pct/10),TAGLINES.length-1)];}
+  else if(q===0){tl.textContent='Set a quota target above and start adding deals below.';}
+  else{tl.textContent='First deal incoming...';}
   COLS.forEach(function(col){
     var cc=document.querySelectorAll('#cards-'+col+' .card'),ct=0;
     cc.forEach(function(c){ct+=parseDollars(c.querySelector('.card-value').textContent);});
@@ -191,16 +196,11 @@ function recalc(){
   });
   document.getElementById('stat-won-count').textContent=dw;
   document.getElementById('stat-avg').textContent=fmtUSD(dw>0?Math.round(tc/dw):0);
-  document.getElementById('stat-pipeline-count').textContent=pc;
+  document.getElementById('stat-hunt-count').textContent=pc;
   updateLeaderboard();
 }
 function updateLeaderboard(){
-  var rows=document.querySelectorAll('#lb-body .lb-row'),maxVal=0;
-  rows.forEach(function(row){
-    var name=(row.querySelector('.lb-name').textContent||'').trim().toLowerCase();if(!name)return;
-    var t=0;document.querySelectorAll('.card.won').forEach(function(c){if((c.querySelector('.card-owner').textContent||'').trim().toLowerCase()===name)t+=parseDollars(c.querySelector('.card-value').textContent);});
-    if(t>maxVal)maxVal=t;
-  });
+  var rows=document.querySelectorAll('#lb-body .lb-row');
   rows.forEach(function(row){
     var name=(row.querySelector('.lb-name').textContent||'').trim().toLowerCase();
     var valEl=row.querySelector('.lb-value');if(!name){if(valEl)valEl.textContent='';return;}
@@ -217,8 +217,7 @@ function makeLbRow(rank,id){
   var vl=document.createElement('div');vl.className='lb-value';
   var db=document.createElement('button');db.className='lb-del';db.textContent='X';db.title='Remove';db.setAttribute('data-id',id);
   db.onclick=function(){deleteLbRow(parseInt(this.getAttribute('data-id')));};
-  row.appendChild(rk);row.appendChild(nm);row.appendChild(vl);row.appendChild(db);
-  return row;
+  row.appendChild(rk);row.appendChild(nm);row.appendChild(vl);row.appendChild(db);return row;
 }
 function deleteLbRow(id){var row=document.querySelector('.lb-row[data-lbid="'+id+'"]');if(row){row.style.opacity='0';row.style.transition='opacity .2s';setTimeout(function(){if(row.parentNode)row.parentNode.removeChild(row);refreshRanks();recalc();},200);}}
 function refreshRanks(){var rows=document.querySelectorAll('#lb-body .lb-row');for(var i=0;i<rows.length;i++){var e=rows[i].querySelector('.lb-rank');e.textContent=RANKS[i]||String(i+1);e.className='lb-rank '+(i===0?'gold':i===1?'silver':i===2?'bronze':'');}}
@@ -238,20 +237,30 @@ function makeCard(col){
   ow.addEventListener('input',recalc);ow.addEventListener('blur',recalc);
   mr.appendChild(vw);mr.appendChild(ow);
   var ac=document.createElement('div');ac.className='card-actions';
-  var wb=document.createElement('button');wb.className='btn btn-won';wb.textContent='Won';wb.setAttribute('data-id',id);
-  wb.onclick=function(){markWon(parseInt(this.getAttribute('data-id')));};
+  if(col==='hunt'){
+    var wb=document.createElement('button');wb.className='btn btn-won';wb.textContent='Won';wb.setAttribute('data-id',id);
+    wb.onclick=function(){moveCard(parseInt(this.getAttribute('data-id')),'won',true);};
+    ac.appendChild(wb);
+  } else {
+    var ub=document.createElement('button');ub.className='btn btn-move';ub.textContent='Still hunting';ub.setAttribute('data-id',id);
+    ub.onclick=function(){moveCard(parseInt(this.getAttribute('data-id')),'hunt',false);};
+    ac.appendChild(ub);
+  }
   var db=document.createElement('button');db.className='btn btn-del';db.textContent='X';db.setAttribute('data-id',id);
   db.onclick=function(){deleteCard(parseInt(this.getAttribute('data-id')));};
-  ac.appendChild(wb);
-  for(var c=0;c<COLS.length;c++){if(COLS[c]!==col){var mb=document.createElement('button');mb.className='btn btn-move';mb.textContent='-> '+COL_LABELS[COLS[c]];mb.setAttribute('data-id',id);mb.setAttribute('data-col',COLS[c]);mb.onclick=function(){moveCard(parseInt(this.getAttribute('data-id')),this.getAttribute('data-col'));};ac.appendChild(mb);}}
   ac.appendChild(db);
-  card.appendChild(co);card.appendChild(mr);card.appendChild(ac);
-  return card;
+  card.appendChild(co);card.appendChild(mr);card.appendChild(ac);return card;
 }
 function addCard(col){var ct=document.getElementById('cards-'+col);var card=makeCard(col);ct.appendChild(card);card.querySelector('.card-company').focus();recalc();}
-function markWon(id){var card=document.querySelector('.card[data-cardid="'+id+'"]');if(card){if(card.classList.contains('won'))card.classList.remove('won');else card.classList.add('won');recalc();}}
 function deleteCard(id){var card=document.querySelector('.card[data-cardid="'+id+'"]');if(card){card.style.opacity='0';card.style.transition='opacity .2s';setTimeout(function(){if(card.parentNode)card.parentNode.removeChild(card);recalc();},200);}}
-function moveCard(id,tc){var card=document.querySelector('.card[data-cardid="'+id+'"]');if(!card)return;var co=card.querySelector('.card-company').textContent,va=card.querySelector('.card-value').textContent,ow=card.querySelector('.card-owner').textContent,ww=card.classList.contains('won');if(card.parentNode)card.parentNode.removeChild(card);var n=makeCard(tc);n.querySelector('.card-company').textContent=co;n.querySelector('.card-value').textContent=va;n.querySelector('.card-owner').textContent=ow;if(ww)n.classList.add('won');document.getElementById('cards-'+tc).appendChild(n);recalc();}
+function moveCard(id,tc,markWon){
+  var card=document.querySelector('.card[data-cardid="'+id+'"]');if(!card)return;
+  var co=card.querySelector('.card-company').textContent,va=card.querySelector('.card-value').textContent,ow=card.querySelector('.card-owner').textContent;
+  if(card.parentNode)card.parentNode.removeChild(card);
+  var n=makeCard(tc);n.querySelector('.card-company').textContent=co;n.querySelector('.card-value').textContent=va;n.querySelector('.card-owner').textContent=ow;
+  if(markWon)n.classList.add('won');
+  document.getElementById('cards-'+tc).appendChild(n);recalc();
+}
 document.getElementById('kpi-quota').addEventListener('blur',function(){var r=parseDollars(this.textContent);this.textContent=r>0?fmtFull(r):'$0';recalc();});
 document.getElementById('kpi-quota').addEventListener('input',recalc);
 (function(){var body=document.getElementById('lb-body');for(var i=0;i<5;i++){body.appendChild(makeLbRow(i,lbId++));}recalc();})();
