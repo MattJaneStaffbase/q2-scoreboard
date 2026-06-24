@@ -116,10 +116,10 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
 </header>
 <div class="main">
   <div class="kpi-row">
-    <div class="kpi blue"><div class="kpi-emoji">💰</div><div class="kpi-label">Total closed</div><div class="kpi-value" id="kpi-closed">$0</div><div class="kpi-sub">Deals in the bag</div></div>
-    <div class="kpi green-kpi"><div class="kpi-emoji">🏆</div><div class="kpi-label">Deals won</div><div class="kpi-value" id="kpi-deals">0</div><div class="kpi-sub">This quarter</div></div>
-    <div class="kpi"><div class="kpi-emoji">🎯</div><div class="kpi-label">Hunting</div><div class="kpi-value" id="kpi-pipeline">$0</div><div class="kpi-sub">Active pipeline value</div></div>
-    <div class="kpi orange"><div class="kpi-emoji">🚀</div><div class="kpi-label">Quota target</div><div class="kpi-value" contenteditable="true" spellcheck="false" id="kpi-quota">$0</div><div class="kpi-sub">Click to set</div></div>
+    <div class="kpi blue"><div class="kpi-emoji">&#x1F4B0;</div><div class="kpi-label">Total closed</div><div class="kpi-value" id="kpi-closed">$0</div><div class="kpi-sub">Deals in the bag</div></div>
+    <div class="kpi green-kpi"><div class="kpi-emoji">&#x1F3C6;</div><div class="kpi-label">Deals won</div><div class="kpi-value" id="kpi-deals">0</div><div class="kpi-sub">This quarter</div></div>
+    <div class="kpi"><div class="kpi-emoji">&#x1F3AF;</div><div class="kpi-label">Hunting</div><div class="kpi-value" id="kpi-pipeline">$0</div><div class="kpi-sub">Active pipeline value</div></div>
+    <div class="kpi orange"><div class="kpi-emoji">&#x1F680;</div><div class="kpi-label">Quota target</div><div class="kpi-value" contenteditable="true" spellcheck="false" id="kpi-quota">$0</div><div class="kpi-sub">Click to set</div></div>
   </div>
   <div class="progress-section">
     <div class="progress-header">
@@ -127,18 +127,18 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
       <div class="progress-right"><div class="progress-fraction" id="progress-fraction">$0 of $0</div><div class="progress-pct" id="pct-label">0%</div></div>
     </div>
     <div class="track"><div class="track-fill" id="track-fill" style="width:0%"></div></div>
-    <div class="track-milestones"><span>$0</span><span>25%</span><span>50%</span><span>75%</span><span>Let's go!</span></div>
+    <div class="track-milestones"><span>$0</span><span>25%</span><span>50%</span><span>75%</span><span>Lets go!</span></div>
     <div class="track-tagline" id="track-tagline">Set a quota target above and start adding deals below.</div>
   </div>
   <div class="body-grid">
     <div class="lb-row-grid">
       <div class="leaderboard">
-        <div class="section-header"><div class="section-title">Leaderboard — AEs</div><div class="section-hint">auto-updates</div></div>
+        <div class="section-header"><div class="section-title">Leaderboard - AEs</div><div class="section-hint">auto-updates</div></div>
         <div id="lb-body-ae"></div>
         <button class="add-row-btn" onclick="addLbRow('ae')">+ Add rep</button>
       </div>
       <div class="leaderboard">
-        <div class="section-header"><div class="section-title">Leaderboard — CS</div><div class="section-hint">auto-updates</div></div>
+        <div class="section-header"><div class="section-title">Leaderboard - CS</div><div class="section-hint">auto-updates</div></div>
         <div id="lb-body-cs"></div>
         <button class="add-row-btn" onclick="addLbRow('cs')">+ Add rep</button>
       </div>
@@ -148,7 +148,7 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
         <div class="col-header">
           <div class="col-top"><div class="col-label">Hunting</div><div class="col-count" id="count-hunt">0 deals</div></div>
           <div class="col-total" id="total-hunt">$0</div>
-          <div class="col-tagline">In progress — keep pushing</div>
+          <div class="col-tagline">In progress - keep pushing</div>
         </div>
         <div class="cards" id="cards-hunt"></div>
         <button class="add-card-btn" onclick="addCard('hunt')">+ Add deal</button>
@@ -168,14 +168,15 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
     <div class="footer-stat gr"><div class="footer-stat-value" id="stat-won-count">0</div><div class="footer-stat-label">Deals closed</div></div>
     <div class="footer-stat or"><div class="footer-stat-value" id="stat-avg">$0</div><div class="footer-stat-label">Avg deal size</div></div>
     <div class="footer-stat sb"><div class="footer-stat-value" id="stat-hunt-count">0</div><div class="footer-stat-label">Still hunting</div></div>
-    <div class="footer-tip">Add deals to <span>Hunting</span>, enter a value, assign an owner — everything updates automatically. Hit <span>Won</span> on a deal when it closes and watch the numbers move.</div>
+    <div class="footer-tip">Add deals to <span>Hunting</span>, enter a value, assign an owner - everything updates automatically. Hit <span>Won</span> on a deal when it closes and watch the numbers move.</div>
   </div>
 </div>
 <script>
-var COLS=['hunt','won'],cardId=0,lbId=0;
-var RANKS=['1st','2nd','3rd','4','5','6','7','8','9','10'];
-var COL_LABELS={hunt:'Hunting',won:'Closed won'};
-var TAGLINES=['Let's go!!','Getting warm...','Keep pushing!','Halfway there!','Almost!','Nearly done!','So close!','Final push!','Incredible!','Crushing it!'];
+var COLS = ['hunt','won'];
+var cardId = 0, lbId = 0;
+var RANKS = ['1st','2nd','3rd','4','5','6','7','8','9','10'];
+var COL_LABELS = {hunt:'Hunting',won:'Closed won'};
+var TAGLINES = ['Lets go!!','Getting warm...','Keep pushing!','Halfway there!','Almost!','Nearly done!','So close!','Final push!','Incredible!','Crushing it!'];
 function parseDollars(s){if(!s)return 0;return parseFloat(String(s).replace(/[^0-9.]/g,''))||0;}
 function fmtUSD(n){if(n===0)return '$0';if(n>=1000000)return '$'+(n/1000000).toFixed(n%1000000===0?0:1)+'M';if(n>=1000)return '$'+Math.round(n/1000)+'K';return '$'+n.toLocaleString('en-US');}
 function fmtFull(n){return '$'+n.toLocaleString('en-US');}
