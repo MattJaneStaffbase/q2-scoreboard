@@ -88,6 +88,7 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
 .btn-won{border-color:rgba(45,217,104,.5);color:#2DD968}.btn-won:hover{background:#2DD968;color:var(--white);border-color:#2DD968}
 .btn-del{border-color:var(--mid-gray);color:var(--dark-gray)}.btn-del:hover{background:#FF475D;border-color:#FF475D;color:var(--white)}
 .btn-move{border-color:rgba(0,108,255,.3);color:var(--mid-blue)}.btn-move:hover{background:var(--mid-blue);color:var(--white);border-color:var(--mid-blue)}
+.btn-reorder{border-color:var(--mid-gray);color:var(--dark-gray);padding:3px 7px}.btn-reorder:hover{background:var(--dark-blue);color:var(--white);border-color:var(--dark-blue)}
 .add-card-btn{margin:0 10px 10px;padding:9px 16px;background:var(--orange);border:none;border-radius:30px;color:var(--dark-blue);font-size:11px;font-weight:700;cursor:pointer;transition:background .12s,transform .1s;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 2px 8px rgba(255,150,0,.25)}
 .add-card-btn:hover{background:var(--orange-hover);transform:translateY(-1px)}
 .footer{background:var(--dark-blue);border-radius:14px;padding:22px 32px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:center}
@@ -101,7 +102,10 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
 </head>
 <body>
 <header class="header">
-  <div class="header-title">Q2 Sales Scoreboard <span>2026</span></div>
+  <div>
+    <div class="header-title">Q2 Sales Scoreboard <span>2026</span></div>
+    <div style="font-size:11px;color:rgba(255,255,255,.4);font-weight:600;margin-top:3px;letter-spacing:.04em">3 markets. 1 team.</div>
+  </div>
   <div class="live-badge"><div class="live-dot"></div> Live</div>
 </header>
 <div class="main">
@@ -266,6 +270,12 @@ function mc(col){
     ub.onclick=function(){mv(parseInt(this.getAttribute('data-id')),'hunt',false);};
     ac.appendChild(ub);
   }
+  var upb=document.createElement('button');upb.className='btn btn-reorder';upb.textContent='↑';upb.setAttribute('data-id',id);
+  upb.onclick=function(){reorder(parseInt(this.getAttribute('data-id')),-1);};
+  ac.appendChild(upb);
+  var dnb=document.createElement('button');dnb.className='btn btn-reorder';dnb.textContent='↓';dnb.setAttribute('data-id',id);
+  dnb.onclick=function(){reorder(parseInt(this.getAttribute('data-id')),1);};
+  ac.appendChild(dnb);
   var db=document.createElement('button');db.className='btn btn-del';db.textContent='X';db.setAttribute('data-id',id);
   db.onclick=function(){dc(parseInt(this.getAttribute('data-id')));};
   ac.appendChild(db);
@@ -279,13 +289,36 @@ function mv(id,tc,markWon){
   var co=card.querySelector('.card-company').textContent;
   var va=card.querySelector('.card-value').textContent;
   var ow=card.querySelector('.card-owner').textContent;
-  if(card.parentNode)card.parentNode.removeChild(card);
+  var srcContainer=card.parentNode;
+  var origIndex=Array.from(srcContainer.children).indexOf(card);
+  srcContainer.removeChild(card);
   var n=mc(tc);
   n.querySelector('.card-company').textContent=co;
   n.querySelector('.card-value').textContent=va;
   n.querySelector('.card-owner').textContent=ow;
-  if(markWon)n.classList.add('won');
-  document.getElementById('cards-'+tc).appendChild(n);rc();
+  if(markWon){
+    n.classList.add('won');
+    n.setAttribute('data-orig-index',origIndex);
+    document.getElementById('cards-'+tc).appendChild(n);
+  } else {
+    var huntContainer=document.getElementById('cards-'+tc);
+    var origIdx=parseInt(card.getAttribute('data-orig-index'));
+    if(isNaN(origIdx))origIdx=origIndex;
+    var siblings=huntContainer.children;
+    if(origIdx>=siblings.length){huntContainer.appendChild(n);}
+    else{huntContainer.insertBefore(n,siblings[origIdx]);}
+  }
+  rc();
+}
+function reorder(id,dir){
+  var card=document.querySelector('.card[data-cardid="'+id+'"]');if(!card)return;
+  var container=card.parentNode;
+  var cards=Array.from(container.children);
+  var idx=cards.indexOf(card);
+  var newIdx=idx+dir;
+  if(newIdx<0||newIdx>=cards.length)return;
+  if(dir===-1){container.insertBefore(card,cards[newIdx]);}
+  else{container.insertBefore(cards[newIdx],card);}
 }
 document.getElementById('kpi-quota').addEventListener('blur',function(){var r=pd(this.textContent);this.textContent=r>0?ff(r):'$0';rc();});
 document.getElementById('kpi-quota').addEventListener('input',rc);
@@ -294,6 +327,63 @@ document.getElementById('kpi-quota').addEventListener('input',rc);
     var body=document.getElementById('lb-body-'+team);
     for(var i=0;i<5;i++){body.appendChild(mlr(i,lbId++));}
   });
+
+  var deals=[
+    {company:'Chipotle',value:800000,owner:'🇺🇸'},
+    {company:'Bunge',value:400000,owner:'🇺🇸'},
+    {company:'SK Pharmtecho',value:125000,owner:'🇺🇸'},
+    {company:'HIG',value:90000,owner:'🇺🇸'},
+    {company:'Well Health',value:70000,owner:'🇺🇸'},
+    {company:'VAI',value:60000,owner:'🇺🇸'},
+    {company:'Gates',value:45000,owner:'🇺🇸'},
+    {company:'Trupanion',value:35000,owner:'🇺🇸'},
+    {company:'Weatherford',value:338000,owner:'🇺🇸'},
+    {company:'Expeditors',value:50000,owner:'🇺🇸'},
+    {company:'ST Wooten',value:42000,owner:'🇺🇸'},
+    {company:'Flex',value:360000,owner:'🇺🇸'},
+    {company:'S&C Electric',value:190000,owner:'🇺🇸'},
+    {company:'Aviso',value:80000,owner:'🇺🇸'},
+    {company:'Target Hospitality',value:78000,owner:'🇺🇸'},
+    {company:'TexDot',value:50000,owner:'🇺🇸'},
+    {company:'Hanger',value:20000,owner:'🇺🇸'},
+    {company:'Ford',value:550000,owner:'🇺🇸'},
+    {company:'IRC',value:20000,owner:'🇺🇸'},
+    {company:'Paramount',value:65000,owner:'🇺🇸'},
+    {company:'Signature Aviation',value:40000,owner:'🇺🇸'},
+    {company:'Clarivate',value:61400,owner:'🇬🇧'},
+    {company:'Age UK',value:115000,owner:'🇬🇧'},
+    {company:'Impact Food Group',value:90000,owner:'🇬🇧'},
+    {company:'Money & Pensions',value:54500,owner:'🇬🇧'},
+    {company:'Capita',value:45000,owner:'🇬🇧'},
+    {company:'Kier',value:39000,owner:'🇬🇧'},
+    {company:'Ocado',value:30000,owner:'🇬🇧'},
+    {company:'Genus',value:30000,owner:'🇬🇧'},
+    {company:'Urenco',value:27300,owner:'🇬🇧'},
+    {company:'ADIC',value:17000,owner:'🇬🇧'},
+    {company:'UTSW upsell',value:35000,owner:'🇺🇸'},
+    {company:'Graybar upsell',value:26000,owner:'🇺🇸'},
+    {company:'Energy Northwest',value:44200,owner:'🇺🇸'},
+    {company:'Qualcomm upsell',value:31900,owner:'🇺🇸'},
+    {company:'Oak View Group',value:11000,owner:'🇺🇸'},
+    {company:'Desert Financial',value:10000,owner:'🇺🇸'},
+    {company:'Mater Health',value:287000,owner:'🇦🇺'},
+    {company:'Coles',value:215000,owner:'🇦🇺'},
+    {company:'Sydney Water',value:29400,owner:'🇦🇺'},
+    {company:'Bhagwan Marine',value:26600,owner:'🇦🇺'},
+    {company:'Dnata',value:12100,owner:'🇦🇺'},
+    {company:'CAR Group',value:10400,owner:'🇦🇺'},
+  ];
+
+  var ct=document.getElementById('cards-hunt');
+  deals.forEach(function(d){
+    var card=mc('hunt');
+    card.querySelector('.card-company').textContent=d.company;
+    var vl=card.querySelector('.card-value');
+    vl.textContent=d.value.toLocaleString('en-US');
+    card.querySelector('.card-owner').textContent=d.owner;
+    ct.appendChild(card);
+  });
+
   rc();
 })();
 </script>
