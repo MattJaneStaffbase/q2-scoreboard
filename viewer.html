@@ -137,13 +137,102 @@ var GIST_ID='459169b9031b885b85203f7585993ae8';
 var RANKS=['1st','2nd','3rd','4','5','6','7','8','9','10'];
 var TAGS=['Lets go!!','Getting warm...','Keep pushing!','Halfway there!','Almost!','Nearly done!','So close!','Final push!','Incredible!','Crushing it!'];
 function fu(n){if(n===0)return '$0';if(n>=1000000)return '$'+(n/1000000).toFixed(n%1000000===0?0:1)+'M';if(n>=1000)return '$'+Math.round(n/1000)+'K';return '$'+n.toLocaleString('en-US');}
+function pd(s){if(s==null)return 0;if(typeof s==='number')return s;return parseFloat(String(s).replace(/[^0-9.]/g,''))||0;}
+// Normalise a deal record into {company, value:<number>, owner}
+function nd(d){return {company:d.company||'',value:pd(d.value),owner:d.owner||''};}
+// Editor stores reps as plain name strings; viewer wants {name}.
+// Strip any region-flag emoji prefix so leaderboard names show without flags
+// (deal cards keep their flag — that's handled separately in nd/renderCards).
+function nr(r){
+  var name=typeof r==='string'?r:((r&&r.name)||'');
+  name=name.replace(/[\u{1F1E6}-\u{1F1FF}]/gu,'').replace(/\s+/g,' ').trim();
+  return {name:name};
+}
+
+// Built-in starting board. Used ONLY as a floor when the Gist is empty/unreachable;
+// the moment the editor syncs real data, live Gist data takes over (see poll()).
+var DEFAULT_STATE={
+  quota:0,
+  cards:{
+    hunt:[
+      // Western US
+      {company:"Chipotle",value:800000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Bunge",value:400000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"SK Pharmtecho",value:125000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"HIG",value:90000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Well Health",value:70000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"VAI",value:60000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Gates",value:45000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Trupanion",value:35000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      // Southern US
+      {company:"Weatherford",value:338000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Flex",value:360000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"S&C Electric",value:190000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Aviso",value:80000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Target Hospitality",value:78000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Expeditors",value:50000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"TexDot",value:50000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"ST Wooten",value:42000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Hanger",value:20000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      // Northeastern US
+      {company:"Ford",value:550000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Paramount",value:65000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Signature Aviation",value:40000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"IRC",value:20000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      // UKIMEA
+      {company:"Age UK",value:115000,owner:"\uD83C\uDDEC\uD83C\uDDE7"},
+      {company:"Impact Food Group",value:90000,owner:"\uD83C\uDDEC\uD83C\uDDE7"},
+      {company:"Clarivate",value:61400,owner:"\uD83C\uDDEC\uD83C\uDDE7"},
+      {company:"Money & Pensions",value:54500,owner:"\uD83C\uDDEC\uD83C\uDDE7"},
+      {company:"Capita",value:45000,owner:"\uD83C\uDDEC\uD83C\uDDE7"},
+      {company:"Kier",value:39000,owner:"\uD83C\uDDEC\uD83C\uDDE7"},
+      {company:"Ocado",value:30000,owner:"\uD83C\uDDEC\uD83C\uDDE7"},
+      {company:"Genus",value:30000,owner:"\uD83C\uDDEC\uD83C\uDDE7"},
+      {company:"Urenco",value:27300,owner:"\uD83C\uDDEC\uD83C\uDDE7"},
+      {company:"ADIC",value:17000,owner:"\uD83C\uDDEC\uD83C\uDDE7"},
+      // Americas CS
+      {company:"Energy Northwest",value:44200,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"UTSW",value:35000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Qualcomm",value:31900,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Graybar",value:26000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Oak View Group",value:11000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      {company:"Desert Financial",value:10000,owner:"\uD83C\uDDFA\uD83C\uDDF8"},
+      // APJ
+      {company:"Mater Health",value:287000,owner:"\uD83C\uDDE6\uD83C\uDDFA"},
+      {company:"Coles",value:215000,owner:"\uD83C\uDDE6\uD83C\uDDFA"},
+      {company:"Sydney Water",value:29400,owner:"\uD83C\uDDE6\uD83C\uDDFA"},
+      {company:"Bhagwan Marine",value:26600,owner:"\uD83C\uDDE6\uD83C\uDDFA"},
+      {company:"Dnata",value:12100,owner:"\uD83C\uDDE6\uD83C\uDDFA"},
+      {company:"CAR Group",value:10400,owner:"\uD83C\uDDE6\uD83C\uDDFA"}
+    ],
+    won:[]
+  },
+  lbs:{
+    ae:["Connor Boyle","Xander Cannon","Steve Kirkpatrick","Gonzalo Rojo","Simon / Will"],
+    cs:["Tara","Sam Sopko","Charlie Stocker","Anna W","Jake Palermo","Will Latter"]
+  }
+};
+
+// True if a Gist payload carries real content worth showing over the built-in board.
+function hasData(s){
+  if(!s||typeof s!=='object')return false;
+  var c=s.cards||{};
+  var hunt=c.hunt||s.deals_hunt||[];
+  var won=c.won||s.deals_won||[];
+  return pd(s.quota)>0||(hunt&&hunt.length>0)||(won&&won.length>0);
+}
 
 function render(state){
-  var quota=state.quota||0;
-  var hunt=state.deals_hunt||[];
-  var won=state.deals_won||[];
-  var ae=state.reps_ae||[];
-  var cs=state.reps_cs||[];
+  state=state||{};
+  var quota=pd(state.quota);
+  var cards=state.cards||{};
+  var lbs=state.lbs||{};
+  // Editor schema: cards.hunt / cards.won (string values) and lbs.ae / lbs.cs (name strings).
+  // Fallback to legacy deals_*/reps_* keys if ever present.
+  var hunt=(cards.hunt||state.deals_hunt||[]).map(nd);
+  var won=(cards.won||state.deals_won||[]).map(nd);
+  var ae=(lbs.ae||state.reps_ae||[]).map(nr);
+  var cs=(lbs.cs||state.reps_cs||[]).map(nr);
 
   // KPIs
   var tc=won.reduce(function(a,d){return a+(d.value||0);},0);
@@ -214,17 +303,21 @@ function poll(){
   fetch('https://gist.githubusercontent.com/MattJaneStaffbase/459169b9031b885b85203f7585993ae8/raw/scoreboard-state.json?nocache='+Date.now())
     .then(function(r){return r.json();})
     .then(function(state){
-      render(state);
+      var live=hasData(state);
+      render(live?state:DEFAULT_STATE);
       var now=new Date();
-      document.getElementById('sync-bar').textContent='Last updated: '+now.toLocaleTimeString();
+      document.getElementById('sync-bar').textContent=(live?'Live · last updated: ':'Starting board · last checked: ')+now.toLocaleTimeString();
     })
     .catch(function(){
-      document.getElementById('sync-bar').textContent='Connection error — retrying...';
+      // Keep the board on screen; just note we couldn't reach the Gist this cycle.
+      render(DEFAULT_STATE);
+      document.getElementById('sync-bar').textContent='Showing starting board — reconnecting...';
     });
 }
 
+render(DEFAULT_STATE);
 poll();
-setInterval(poll,60000);
+setInterval(poll,10000);
 </script>
 </body>
 </html>
