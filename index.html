@@ -111,6 +111,7 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
 .btn-won{border-color:rgba(45,217,104,.5);color:#2DD968}.btn-won:hover{background:#2DD968;color:var(--white);border-color:#2DD968}
 .btn-del{border-color:var(--mid-gray);color:var(--dark-gray)}.btn-del:hover{background:#FF475D;border-color:#FF475D;color:var(--white)}
 .btn-move{border-color:rgba(0,108,255,.3);color:var(--mid-blue)}.btn-move:hover{background:var(--mid-blue);color:var(--white);border-color:var(--mid-blue)}
+.btn-ord{border-color:var(--mid-gray);color:var(--dark-gray);padding:3px 7px;letter-spacing:0;line-height:1}.btn-ord:hover{background:var(--dark-blue);color:var(--white);border-color:var(--dark-blue)}
 .add-card-btn{margin:0 8px 8px;padding:8px 14px;background:var(--orange);border:none;border-radius:30px;color:var(--dark-blue);font-size:11px;font-weight:700;cursor:pointer;transition:background .12s;display:flex;align-items:center;justify-content:center;gap:5px;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 2px 8px rgba(255,150,0,.2)}
 .add-card-btn:hover{background:var(--orange-hover)}
 .footer{background:var(--dark-blue);border-radius:14px;padding:20px 28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:center}
@@ -180,7 +181,7 @@ html{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
 <script>
 var GIST_ID='459169b9031b885b85203f7585993ae8';
 var GIST_TOKEN='';
-var COLS=['hunt','won'],cardId=0,lbId=0;
+var COLS=['hunt','won'],cardId=0,lbId=0,origSeq=0;
 var RANKS=['1st','2nd','3rd','4','5','6','7','8','9','10'];
 var TAGS=['Lets go!!','Getting warm...','Keep pushing!','Halfway there!','Almost!','Nearly done!','So close!','Final push!','Incredible!','Crushing it!'];
 var syncTimer=null;
@@ -245,6 +246,7 @@ function restoreState(state){
       arr.forEach(function(c){
         if(!c.company&&!c.value)return;
         var card=mc(col);
+        card.setAttribute('data-orig',origSeq++);
         card.querySelector('.card-company').textContent=c.company||'';
         card.querySelector('.card-value').textContent=c.value||'';
         card.querySelector('.card-owner').textContent=c.owner||'';
@@ -382,6 +384,9 @@ function mc(col){
   ow.addEventListener('input',rcAndSync);ow.addEventListener('blur',rcAndSync);
   mr.appendChild(vw);mr.appendChild(ow);
   var ac=document.createElement('div');ac.className='card-actions';
+  var up=document.createElement('button');up.className='btn btn-ord';up.textContent='↑';up.title='Move up';up.setAttribute('data-id',id);up.onclick=function(){moveUp(parseInt(this.getAttribute('data-id')));};
+  var dn=document.createElement('button');dn.className='btn btn-ord';dn.textContent='↓';dn.title='Move down';dn.setAttribute('data-id',id);dn.onclick=function(){moveDown(parseInt(this.getAttribute('data-id')));};
+  ac.appendChild(up);ac.appendChild(dn);
   if(col==='hunt'){
     var wb=document.createElement('button');wb.className='btn btn-won';wb.textContent='Won';wb.setAttribute('data-id',id);
     wb.onclick=function(){mv(parseInt(this.getAttribute('data-id')),'won',true);};
@@ -395,15 +400,20 @@ function mc(col){
   db.onclick=function(){dc(parseInt(this.getAttribute('data-id')));};
   ac.appendChild(db);card.appendChild(co);card.appendChild(mr);card.appendChild(ac);return card;
 }
-function addCard(col){var ct=document.getElementById('cards-'+col);var card=mc(col);ct.appendChild(card);card.querySelector('.card-company').focus();rcAndSync();}
+function addCard(col){var ct=document.getElementById('cards-'+col);var card=mc(col);card.setAttribute('data-orig',origSeq++);ct.appendChild(card);card.querySelector('.card-company').focus();rcAndSync();}
+function moveUp(id){var c=document.querySelector('.card[data-cardid="'+id+'"]');if(!c)return;var p=c.previousElementSibling;if(p&&p.classList.contains('card')){c.parentNode.insertBefore(c,p);rcAndSync();}}
+function moveDown(id){var c=document.querySelector('.card[data-cardid="'+id+'"]');if(!c)return;var n=c.nextElementSibling;if(n&&n.classList.contains('card')){c.parentNode.insertBefore(n,c);rcAndSync();}}
+function placeByOrig(container,card){var orig=parseFloat(card.getAttribute('data-orig'));if(isNaN(orig)){container.appendChild(card);return;}var kids=container.querySelectorAll('.card');var ref=null;for(var i=0;i<kids.length;i++){var o=parseFloat(kids[i].getAttribute('data-orig'));if(isNaN(o)||o>orig){ref=kids[i];break;}}if(ref)container.insertBefore(card,ref);else container.appendChild(card);}
 function dc(id){var card=document.querySelector('.card[data-cardid="'+id+'"]');if(card){card.style.opacity='0';card.style.transition='opacity .2s';setTimeout(function(){if(card.parentNode)card.parentNode.removeChild(card);rcAndSync();},200);}}
 function mv(id,tc,markWon){
   var card=document.querySelector('.card[data-cardid="'+id+'"]');if(!card)return;
   var co=card.querySelector('.card-company').textContent,va=card.querySelector('.card-value').textContent,ow=card.querySelector('.card-owner').textContent;
+  var orig=card.getAttribute('data-orig');
   if(card.parentNode)card.parentNode.removeChild(card);
   var n=mc(tc);n.querySelector('.card-company').textContent=co;n.querySelector('.card-value').textContent=va;n.querySelector('.card-owner').textContent=ow;
+  if(orig!==null)n.setAttribute('data-orig',orig);
   if(markWon)n.classList.add('won');
-  document.getElementById('cards-'+tc).appendChild(n);rcAndSync();
+  placeByOrig(document.getElementById('cards-'+tc),n);rcAndSync();
 }
 document.getElementById('kpi-quota').addEventListener('blur',function(){var r=pd(this.textContent);this.textContent=r>0?ff(r):'$0';rcAndSync();});
 document.getElementById('kpi-quota').addEventListener('input',rcAndSync);
