@@ -262,25 +262,28 @@ function clearToken(){
 }
 
 
-var POLL_MS=4000, firstLoad=true, prevWon={};
+var POLL_MS=2500, firstLoad=true, prevWon={};
+var BC=('BroadcastChannel'in window)?new BroadcastChannel('q2-scoreboard'):null;
 function setLive(state,text){var p=document.getElementById('live-pill');var t=document.getElementById('live-text');if(p)p.className='live-pill'+(state==='error'?' error':'');if(t)t.textContent=text;}
 function enableSound(){try{if(window.playGong)window.playGong(false);}catch(e){}var b=document.getElementById('sound-btn');if(b){b.textContent='\u{1F50A} Sound on';b.classList.add('on');setTimeout(function(){b.style.display='none';},1400);}}
+function applyIncoming(state){
+  if(!state||!state.cards){if(firstLoad){restoreState(DEFAULT_STATE);firstLoad=false;}setLive('live','LIVE');return;}
+  if(state.ts&&state.ts===window._lastTs){setLive('live','LIVE');return;}
+  window._lastTs=state.ts||0;
+  var newWon=(state.cards.won||[]).map(function(c){return (c.company||'').trim();}).filter(Boolean);
+  restoreState(state);
+  setLive('live','LIVE');
+  if(!firstLoad){
+    var fresh=newWon.filter(function(co){return !prevWon[co];});
+    if(fresh.length&&window.celebrate){window.celebrate({x:window.innerWidth*0.5,y:window.innerHeight*0.42});}
+  }
+  firstLoad=false; prevWon={}; newWon.forEach(function(co){prevWon[co]=1;});
+}
+if(BC){BC.onmessage=function(e){try{applyIncoming(e.data);}catch(err){}};}
 function poll(){
   fetch('https://gist.githubusercontent.com/MattJaneStaffbase/'+GIST_ID+'/raw/scoreboard-state.json?t='+Date.now())
     .then(function(r){return r.json();})
-    .then(function(state){
-      if(!state||!state.cards){if(firstLoad){restoreState(DEFAULT_STATE);firstLoad=false;}setLive('live','LIVE');return;}
-      if(state.ts&&state.ts===window._lastTs){setLive('live','LIVE');return;}
-      window._lastTs=state.ts||0;
-      var newWon=(state.cards.won||[]).map(function(c){return (c.company||'').trim();}).filter(Boolean);
-      restoreState(state);
-      setLive('live','LIVE');
-      if(!firstLoad){
-        var fresh=newWon.filter(function(co){return !prevWon[co];});
-        if(fresh.length&&window.celebrate){window.celebrate({x:window.innerWidth*0.5,y:window.innerHeight*0.42});}
-      }
-      firstLoad=false; prevWon={}; newWon.forEach(function(co){prevWon[co]=1;});
-    })
+    .then(function(state){ applyIncoming(state); })
     .catch(function(){ if(firstLoad){restoreState(DEFAULT_STATE);firstLoad=false;} setLive('error','OFFLINE'); });
 }
 function loadFromGist(){poll();}
