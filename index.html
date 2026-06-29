@@ -64,7 +64,7 @@ body{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
 .col-hunt .col-total{color:var(--mid-blue)}.col-won .col-total{color:var(--green)}
 .add-card-btn{font-size:10px;font-weight:700;background:var(--orange);color:var(--dark-blue);border:none;border-radius:20px;padding:3px 9px;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;transition:background .12s}
 .add-card-btn:hover{background:var(--orange-hover)}
-.cards{padding:7px;flex:1;min-height:0;overflow:hidden}
+.cards{padding:7px;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden}
 .cards.multicol{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;align-content:start;overflow-y:auto;overflow-x:hidden}
 .cards.multicol::-webkit-scrollbar{width:7px}.cards.multicol::-webkit-scrollbar-thumb{background:var(--mid-gray);border-radius:10px}
 
@@ -92,6 +92,7 @@ body{font-family:var(--inter);background:var(--light-gray);color:var(--dark-blue
 .btn-won{border-color:rgba(45,217,104,.5);color:#1FA94E}.btn-won:hover{background:var(--green);color:var(--white);border-color:var(--green)}
 .btn-del{border-color:var(--mid-gray);color:var(--dark-gray);padding:2px 5px}.btn-del:hover{background:#FF475D;border-color:#FF475D;color:var(--white)}
 .btn-move{border-color:rgba(0,108,255,.3);color:var(--mid-blue)}.btn-move:hover{background:var(--mid-blue);color:var(--white);border-color:var(--mid-blue)}
+.btn-team{font-weight:800;letter-spacing:.02em;padding:2px 5px}.btn-team.ae{border-color:rgba(0,108,255,.5);color:var(--mid-blue)}.btn-team.ae:hover{background:var(--mid-blue);color:#fff;border-color:var(--mid-blue)}.btn-team.cs{border-color:rgba(45,217,104,.5);color:#1FA94E}.btn-team.cs:hover{background:var(--green);color:#fff;border-color:var(--green)}
 .btn-ord{border-color:var(--mid-gray);color:var(--dark-gray);padding:2px 4px;letter-spacing:0}.btn-ord:hover{background:var(--dark-blue);color:var(--white);border-color:var(--dark-blue)}
 
 /* Sidebar */
@@ -292,7 +293,7 @@ function restoreState(state){
         card.querySelector('.card-company').textContent=c.company||'';
         card.querySelector('.card-value').textContent=c.value||'';
         card.querySelector('.card-owner').textContent=c.owner||'';
-        var tm=(c.team==='cs')?'cs':'ae';card.dataset.team=tm;var rpEl=card.querySelector('.card-rep');if(rpEl){rpEl.textContent=c.rep||'';rpEl.className='card-rep '+tm;}
+        var tm=(c.team==='cs')?'cs':'ae';card.dataset.team=tm;var rpEl=card.querySelector('.card-rep');if(rpEl){rpEl.textContent=c.rep||'';rpEl.className='card-rep '+tm;}var tbEl=card.querySelector('.btn-team');if(tbEl){tbEl.className='btn btn-team '+tm;tbEl.textContent=tm.toUpperCase();}
         if(c.won)card.classList.add('won');
         document.getElementById('cards-'+col).appendChild(card);
       });
@@ -421,6 +422,7 @@ function dlr(id){
 function rrk(team){var rows=document.querySelectorAll('#lb-body-'+team+' .lb-row');for(var i=0;i<rows.length;i++){var e=rows[i].querySelector('.lb-rank');e.textContent=RANKS[i]||String(i+1);e.className='lb-rank '+(i===0?'gold':i===1?'silver':i===2?'bronze':'');}}
 function addLbRow(team){var body=document.getElementById('lb-body-'+team);var rank=body.querySelectorAll('.lb-row').length;if(rank>=12)return;var row=mlr(rank,lbId);lbId++;body.appendChild(row);row.querySelector('.lb-name').focus();}
 
+function tt(id){var card=document.querySelector('.card[data-cardid="'+id+'"]');if(!card)return;var t=(card.dataset.team==='cs')?'ae':'cs';card.dataset.team=t;var rp=card.querySelector('.card-rep');if(rp)rp.className='card-rep '+t;var tb=card.querySelector('.btn-team');if(tb){tb.className='btn btn-team '+t;tb.textContent=t.toUpperCase();}rcAndSync();}
 function mc(col){
   var id=cardId++;
   var card=document.createElement('div');card.className='card';card.setAttribute('data-cardid',id);
@@ -438,6 +440,7 @@ function mc(col){
   mr.appendChild(vw);mr.appendChild(ow);mr.appendChild(rp);
   card.dataset.team='ae';
   var ac=document.createElement('div');ac.className='card-actions';
+  var tb=document.createElement('button');tb.className='btn btn-team '+card.dataset.team;tb.textContent=card.dataset.team.toUpperCase();tb.title='Toggle AE (blue) / CS (green)';tb.setAttribute('data-id',id);tb.onclick=function(){tt(parseInt(this.getAttribute('data-id')));};ac.appendChild(tb);
   var up=document.createElement('button');up.className='btn btn-ord';up.textContent='\u2191';up.title='Move up';up.setAttribute('data-id',id);up.onclick=function(){moveUp(parseInt(this.getAttribute('data-id')));};
   var dn=document.createElement('button');dn.className='btn btn-ord';dn.textContent='\u2193';dn.title='Move down';dn.setAttribute('data-id',id);dn.onclick=function(){moveDown(parseInt(this.getAttribute('data-id')));};
   ac.appendChild(up);ac.appendChild(dn);
@@ -466,7 +469,7 @@ function mv(id,tc,markWon){
   var orig=card.getAttribute('data-orig');
   if(card.parentNode)card.parentNode.removeChild(card);
   var n=mc(tc);n.querySelector('.card-company').textContent=co;n.querySelector('.card-value').textContent=va;n.querySelector('.card-owner').textContent=ow;
-  var rEl2=n.querySelector('.card-rep');if(rEl2){rEl2.textContent=rep;rEl2.className='card-rep '+team;}n.dataset.team=team;
+  var rEl2=n.querySelector('.card-rep');if(rEl2){rEl2.textContent=rep;rEl2.className='card-rep '+team;}n.dataset.team=team;var tEl2=n.querySelector('.btn-team');if(tEl2){tEl2.className='btn btn-team '+team;tEl2.textContent=team.toUpperCase();}
   if(orig!==null)n.setAttribute('data-orig',orig);
   if(markWon)n.classList.add('won');
   placeByOrig(document.getElementById('cards-'+tc),n);rcAndSync();
